@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cl.mineduc.sidep.cambioiperutapi.mappers.PersonaMapper">
+
+    <select id="findByRut" resultType="java.lang.Long">
+        SELECT pk_pers_id_persona
+        FROM persona
+        WHERE pers_rut = #{rut}
+    </select>
+
+    <update id="updateIpeToRut">
+        UPDATE persona
+        SET pers_rut = #{rut},
+            pers_dv = #{dv},
+            pers_fecha_actualizacion = CURRENT_TIMESTAMP,
+            pers_es_rut = TRUE
+        WHERE pers_rut = #{ipe}
+    </update>
+
+</mapper>
