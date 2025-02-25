@@ -4,27 +4,23 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.1.11.RELEASE</version>
     </parent>
 
-
     <groupId>cl.mineduc.sidep</groupId>
-    <artifactId>grupo-matricula-api</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>grupo-matricula-api</artifactId> <!-- Cambié el nombre del artifactId -->
+    <version>1.0.0</version>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <springfox.version>2.9.2</springfox.version>
         <mineduc.framework.version>2.4.2</mineduc.framework.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <nexus.repo.url>http://dockerdesa.mineduc.cl:8081/nexus/content/repositories</nexus.repo.url>
     </properties>
-
 
     <repositories>
         <repository>
@@ -36,8 +32,8 @@
             <url>${nexus.repo.url}/snapshots</url>
         </repository>
     </repositories>
-    <dependencies>
 
+    <dependencies>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
@@ -53,9 +49,6 @@
             <artifactId>janino</artifactId>
         </dependency>
 
-        <!--
-            toma los logs capturados con el api log4j version 2.0 y los coloca en el api slf4j.
-       -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-to-slf4j</artifactId>
@@ -84,12 +77,12 @@
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
+            <artifactId>springfox-bean-validators</artifactId>
             <version>${springfox.version}</version>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
-            <artifactId>springfox-bean-validators</artifactId>
+            <artifactId>springfox-swagger-ui</artifactId>
             <version>${springfox.version}</version>
         </dependency>
         <dependency>
@@ -123,17 +116,15 @@
             <artifactId>lombok</artifactId>
         </dependency>
 
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>
-        <finalName>sidep-api</finalName>
+        <finalName>grupo-matricula-api</finalName> <!-- Cambié el nombre del finalName -->
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -185,6 +176,11 @@
                 <version>0.8.12</version>
                 <configuration>
                     <excludes>
+                        <exclude>cl/mineduc/sidep/datosgrupomatriculaapi/resources/**</exclude>
+                        <exclude>cl/mineduc/sidep/datosgrupomatriculaapi/config/**</exclude>
+                        <exclude>cl/mineduc/sidep/datosgrupomatriculaapi/model/**</exclude>
+                        <exclude>cl/mineduc/sidep/datosgrupomatriculaapi/entities/**</exclude>
+                        <exclude>cl/mineduc/sidep/datosgrupomatriculaapi/filter/**</exclude>
                     </excludes>
                 </configuration>
                 <executions>

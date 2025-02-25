@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cl.mineduc.sidep.datosgrupomatriculaapi.mappers.CursoAsistenteMapper">
+
+    <!-- Insertar asistentes a un curso -->
+    <insert id="insertAsistente" parameterType="cl.mineduc.sidep.datosgrupomatriculaapi.model.AsistenteCurso">
+        <!-- Insertar en la tabla unidad_educativa -->
+        INSERT INTO unidad_educativa (uned_rbd, ensenanza, grado, letra, jornada, cupo, educador_rut, educador_dv)
+        VALUES (#{rbd}, #{ensenanza}, #{grado}, #{letra}, #{jornada}, #{cupo}, #{educador.rut}, #{educador.dv});
+
+        <!-- Relacionar con la tabla grupo -->
+        INSERT INTO grupo (grup_letra, grup_cupo)
+        VALUES (#{letra}, #{cupo});
+
+        <!-- Relacionar con la tabla grado -->
+        INSERT INTO grado (grad_nombre)
+        VALUES (#{grado});
+
+        <!-- Relacionar con la tabla persona para los asistentes -->
+        <foreach collection="asistentes" item="asistente" separator=";">
+            INSERT INTO persona (pers_rut, pers_dv)
+            VALUES (#{asistente.rut}, #{asistente.dv});
+        </foreach>
+
+        <!-- Relacionar con la tabla curso_asistente (asistentes al curso) -->
+        <foreach collection="asistentes" item="asistente" separator=";">
+            INSERT INTO curso_asistente (uned_rbd, rut_asistente)
+            VALUES (#{rbd}, #{asistente.rut});
+        </foreach>
+    </insert>
+
+    <!-- Obtener asistentes para un curso específico -->
+    <select id="getAsistentesByCurso" resultType="cl.mineduc.sidep.datosgrupomatriculaapi.model.AsistenteCurso">
+        SELECT a.pers_rut, a.pers_dv
+        FROM persona a
+                 JOIN curso_asistente ca ON a.pers_rut = ca.rut_asistente
+        WHERE ca.uned_rbd = #{rbd}
+    </select>
+
+    <!-- Eliminar asistentes de un curso -->
+    <delete id="deleteAsistentesFromCurso" parameterType="cl.mineduc.sidep.datosgrupomatriculaapi.model.AsistenteCurso">
+        DELETE FROM curso_asistente
+        WHERE uned_rbd = #{rbd} AND rut_asistente = #{asistente.rut};
+    </delete>
+
+</mapper>
