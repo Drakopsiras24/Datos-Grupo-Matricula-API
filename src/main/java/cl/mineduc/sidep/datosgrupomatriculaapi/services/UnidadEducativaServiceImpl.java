@@ -4,6 +4,7 @@ import cl.mineduc.sidep.datosgrupomatriculaapi.model.CursoMatriculaModel;
 import cl.mineduc.sidep.datosgrupomatriculaapi.mappers.UnidadEducativaMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Optional;
 
 @Service
 public class UnidadEducativaServiceImpl implements UnidadEducativaService {
@@ -15,25 +16,22 @@ public class UnidadEducativaServiceImpl implements UnidadEducativaService {
         this.unidadEducativaMapper = unidadEducativaMapper;
     }
 
-    // Implementación para crear una nueva unidad educativa
     @Override
     public void crearUnidadEducativa(CursoMatriculaModel curso) {
         unidadEducativaMapper.insertUnidadEducativa(curso);
     }
 
-    // Implementación para obtener una unidad educativa por RBD
     @Override
     public CursoMatriculaModel obtenerUnidadEducativa(Integer rbd) {
-        return unidadEducativaMapper.getUnidadEducativaByRBD(rbd);
+        return Optional.ofNullable(unidadEducativaMapper.getUnidadEducativaByRBD(rbd))
+                .orElseThrow(() -> new RuntimeException("Unidad Educativa no encontrada"));
     }
 
-    // Implementación para actualizar una unidad educativa
     @Override
     public void actualizarUnidadEducativa(CursoMatriculaModel curso) {
         unidadEducativaMapper.updateUnidadEducativa(curso);
     }
 
-    // Implementación para eliminar una unidad educativa por RBD
     @Override
     public void eliminarUnidadEducativa(Integer rbd) {
         unidadEducativaMapper.deleteUnidadEducativa(rbd);

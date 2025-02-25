@@ -15,4 +15,7 @@ public interface CursoService {
 
     // Método para eliminar un curso
     boolean eliminarCurso(int rbd);
+
+    // Agregar el nuevo método para obtener un curso con parámetros
+    CursoMatriculaModel obtenerCursoConParametros(Integer rbd, Integer ensenanza, Integer grado, String letra);
 }
