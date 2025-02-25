@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cl.mineduc.sidep.datosgrupomatriculaapi.mappers.MatriculaMapper">
+
+    <!-- Insertar una nueva matrícula -->
+    <insert id="insertMatricula" parameterType="cl.mineduc.sidep.datosgrupomatriculaapi.model.Matricula">
+        INSERT INTO matricula (rbd, ensenanza, grado, letra, jornada, jornadaExtendida, rut, dv, fechaMatricula)
+        VALUES (#{rbd}, #{ensenanza}, #{grado}, #{letra}, #{jornada}, #{jornadaExtendida}, #{rut}, #{dv}, #{fechaMatricula});
+    </insert>
+
+    <!-- Actualizar matrícula -->
+    <update id="updateMatricula" parameterType="cl.mineduc.sidep.datosgrupomatriculaapi.model.Matricula">
+        UPDATE matricula
+        SET ensenanza = #{ensenanza},
+            grado = #{grado},
+            letra = #{letra},
+            jornada = #{jornada},
+            jornadaExtendida = #{jornadaExtendida},
+            rut = #{rut},
+            dv = #{dv},
+            fechaMatricula = #{fechaMatricula}
+        WHERE rbd = #{rbd} AND rut = #{rut};
+    </update>
+
+    <!-- Eliminar matrícula por RBD y Rut -->
+    <delete id="deleteMatricula" parameterType="map">
+        DELETE FROM matricula WHERE rbd = #{rbd} AND rut = #{rut};
+    </delete>
+
+    <!-- Obtener matrícula por RBD y Rut -->
+    <select id="getMatriculasByRbdAndRut" resultType="cl.mineduc.sidep.datosgrupomatriculaapi.model.Matricula">
+        SELECT * FROM matricula
+        WHERE rbd = #{rbd} AND rut = #{rut}
+    </select>
+
+</mapper>
