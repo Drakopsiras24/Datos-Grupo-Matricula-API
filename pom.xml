@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>cl.mineduc.sidep</groupId>
-    <artifactId>grupo-matricula-api</artifactId> <!-- Cambié el nombre del artifactId -->
+    <artifactId>api-sidep-grupo-matricula</artifactId> <!-- Cambié el nombre del artifactId -->
     <version>1.0.0</version>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -124,7 +124,7 @@
     </dependencies>
 
     <build>
-        <finalName>grupo-matricula-api</finalName> <!-- Cambié el nombre del finalName -->
+        <finalName>api-sidep-grupo-matricula</finalName> <!-- Cambié el nombre del finalName -->
         <resources>
             <resource>
                 <directory>src/main/resources</directory>

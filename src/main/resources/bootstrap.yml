@@ -1,6 +1,6 @@
 spring:
   application:
-    name: carrera-docente-api
+    name: api-sidep-grupo-matricula
   cloud:
     config:
       failFast: true
