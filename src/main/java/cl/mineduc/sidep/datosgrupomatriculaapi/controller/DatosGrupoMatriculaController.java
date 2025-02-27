@@ -70,25 +70,7 @@ public class DatosGrupoMatriculaController {
         }
         return ResponseEntity.ok(curso); // Devuelve los datos del curso si se encuentra
     }
-
-    // Eliminar un curso
-    @DeleteMapping("/{rbd}")
-    public ResponseEntity<Void> eliminarCurso(@PathVariable int rbd) {
-        boolean eliminado = cursoService.eliminarCurso(rbd);
-        if (eliminado) {
-            return ResponseEntity.ok().build(); // Devuelve un status 200 si el curso es eliminado
-        }
-        return ResponseEntity.status(404).build(); // Devuelve un status 404 si no se encuentra el curso
-    }
-
-    // Eliminar un asistente de un curso
-    @DeleteMapping("/asistente")
-    public ResponseEntity<Void> eliminarAsistente(@RequestBody AsistenteCurso.Asistente asistente) {
-        Integer rutAsistente = asistente.getRut(); // Obtén el rut del asistente
-        asistenteService.eliminarAsistente(rutAsistente);
-        return ResponseEntity.status(200).build(); // Devuelve un status 200 si el asistente es eliminado
-    }
-
+    
     // Ingresar matrícula del alumno
     @PostMapping("/matricula")
     public ResponseEntity<Void> ingresarMatricula(@RequestBody Matricula matricula) {
@@ -113,12 +95,4 @@ public class DatosGrupoMatriculaController {
         return ResponseEntity.ok(matriculas); // Devuelve la lista de matrículas
     }
 
-
-
-    // Eliminar matrícula del alumno
-    @DeleteMapping("/matricula")
-    public ResponseEntity<Void> eliminarMatricula(@RequestParam int rbd, @RequestParam int rut) {
-        matriculaService.eliminarMatricula(rbd, rut);
-        return ResponseEntity.status(200).build(); // Devuelve un status 200 si la matrícula es eliminada
-    }
 }
