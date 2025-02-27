@@ -1,6 +1,6 @@
 package cl.mineduc.sidep.datosgrupomatriculaapi.controller;
 
-import cl.mineduc.sidep.datosgrupomatriculaapi.model.CursoMatriculaModel;
+import cl.mineduc.sidep.datosgrupomatriculaapi.model.GrupoModel;
 import cl.mineduc.sidep.datosgrupomatriculaapi.services.CursoService;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,47 +35,47 @@ public class DatosGrupoMatriculaControllerTest {
 
     @Test
     public void crearCurso() {
-        CursoMatriculaModel curso = new CursoMatriculaModel();
+        GrupoModel curso = new GrupoModel();
         curso.setRbd(1);
         curso.setGrado(1);
         curso.setLetra("A");
-        curso.setJornada("MAÑANA");
+        curso.setJornada(1);
 
-        doNothing().when(cursoService).crearCurso(any(CursoMatriculaModel.class));
+        doNothing().when(cursoService).crearCurso(any(GrupoModel.class));
 
         ResponseEntity<Void> response = datosGrupoMatriculaController.crearCurso(curso);
 
         assertNotNull(response);
-        verify(cursoService, times(1)).crearCurso(any(CursoMatriculaModel.class));
+        verify(cursoService, times(1)).crearCurso(any(GrupoModel.class));
     }
 
     @Test
     public void actualizarCurso() {
-        CursoMatriculaModel curso = new CursoMatriculaModel();
+        GrupoModel curso = new GrupoModel();
         curso.setRbd(1);
         curso.setGrado(1);
         curso.setLetra("A");
-        curso.setJornada("TARDE");
+        curso.setJornada(1);
 
-        doNothing().when(cursoService).actualizarCurso(any(CursoMatriculaModel.class));
+        doNothing().when(cursoService).actualizarCurso(any(GrupoModel.class));
 
         ResponseEntity<Void> response = datosGrupoMatriculaController.actualizarCurso(curso);
 
         assertNotNull(response);
-        verify(cursoService, times(1)).actualizarCurso(any(CursoMatriculaModel.class));
+        verify(cursoService, times(1)).actualizarCurso(any(GrupoModel.class));
     }
 
     @Test
     public void obtenerCurso() {
-        CursoMatriculaModel curso = new CursoMatriculaModel();
+        GrupoModel curso = new GrupoModel();
         curso.setRbd(1);
         curso.setGrado(1);
         curso.setLetra("A");
-        curso.setJornada("MAÑANA");
+        curso.setJornada(1);
 
         when(cursoService.obtenerCurso(1)).thenReturn(curso);
 
-        ResponseEntity<CursoMatriculaModel> response = datosGrupoMatriculaController.obtenerCurso(1);
+        ResponseEntity<GrupoModel> response = datosGrupoMatriculaController.obtenerCurso(1);
 
         assertNotNull(response);
         assertNotNull(response.getBody());

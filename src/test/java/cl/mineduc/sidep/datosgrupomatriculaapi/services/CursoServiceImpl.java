@@ -1,31 +1,49 @@
 package cl.mineduc.sidep.datosgrupomatriculaapi.services;
 
-import cl.mineduc.sidep.datosgrupomatriculaapi.model.CursoMatriculaModel;
-import cl.mineduc.sidep.datosgrupomatriculaapi.services.CursoService;
+import cl.mineduc.sidep.datosgrupomatriculaapi.model.GrupoModel;
+import cl.mineduc.sidep.datosgrupomatriculaapi.mappers.GrupoMapper;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CursoServiceImpl implements CursoService {
 
+    private final GrupoMapper grupoMapper;
+
+    // Constructor donde inyectamos el GrupoMapper
+    public CursoServiceImpl(GrupoMapper grupoMapper) {
+        this.grupoMapper = grupoMapper;
+    }
+
+    // Métodos actualizados que ahora utilizan GrupoMapper
+
     @Override
-    public void crearCurso(CursoMatriculaModel curso) {
-        // Lógica para crear un curso
+    public void crearCurso(GrupoModel model) {
+        // Utilizamos GrupoMapper para insertar el nuevo curso
+        grupoMapper.insertGrupo(model);
     }
 
     @Override
-    public void actualizarCurso(CursoMatriculaModel curso) {
-        // Lógica para actualizar un curso
+    public void actualizarCurso(GrupoModel model) {
+        // Utilizamos GrupoMapper para actualizar el curso
+        grupoMapper.updateGrupo(model);
     }
 
     @Override
-    public CursoMatriculaModel obtenerCurso(Integer rbd) {
-        // Lógica para obtener un curso por RBD
-        return new CursoMatriculaModel(); // Retornar el modelo de curso adecuado
+    public GrupoModel obtenerCurso(Integer rbd) {
+        // Obtenemos el curso usando el GrupoMapper
+        return grupoMapper.getGrupoByRBD(rbd);
     }
 
     @Override
     public boolean eliminarCurso(int rbd) {
-        // Lógica para eliminar un curso
-        return true;
+        // Elimina el curso utilizando el GrupoMapper
+        return grupoMapper.deleteGrupo(rbd) > 0;
+    }
+
+    // Implementamos el nuevo método para obtener un curso con parámetros
+    @Override
+    public GrupoModel obtenerCursoConParametros(Integer rbd, Integer grado, String letra) {
+        // Buscamos el curso con parámetros específicos usando GrupoMapper
+        return grupoMapper.getGrupoByParametros(rbd, grado, letra);
     }
 }

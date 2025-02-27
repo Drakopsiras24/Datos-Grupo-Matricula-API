@@ -1,7 +1,7 @@
 package cl.mineduc.sidep.datosgrupomatriculaapi.controller;
 
 import cl.mineduc.sidep.datosgrupomatriculaapi.model.AsistenteCurso;
-import cl.mineduc.sidep.datosgrupomatriculaapi.model.CursoMatriculaModel;
+import cl.mineduc.sidep.datosgrupomatriculaapi.model.GrupoModel;
 import cl.mineduc.sidep.datosgrupomatriculaapi.model.Matricula;
 import cl.mineduc.sidep.datosgrupomatriculaapi.services.AsistenteService;
 import cl.mineduc.sidep.datosgrupomatriculaapi.services.CursoService;
@@ -24,7 +24,7 @@ public class DatosGrupoMatriculaController {
 
     // Ingresar un nuevo curso
     @PostMapping
-    public ResponseEntity<Void> crearCurso(@RequestBody CursoMatriculaModel curso) {
+    public ResponseEntity<Void> crearCurso(@RequestBody GrupoModel curso) {
         cursoService.crearCurso(curso);
         return ResponseEntity.status(201).build(); // Devuelve un status 201 si el curso es creado
     }
@@ -40,15 +40,15 @@ public class DatosGrupoMatriculaController {
 
     // Actualizar los datos de un curso
     @PutMapping
-    public ResponseEntity<Void> actualizarCurso(@RequestBody CursoMatriculaModel curso) {
+    public ResponseEntity<Void> actualizarCurso(@RequestBody GrupoModel curso) {
         cursoService.actualizarCurso(curso);
         return ResponseEntity.ok().build(); // Devuelve un status 200 si el curso es actualizado
     }
 
     // Obtener los datos de un curso por su RBD
     @GetMapping("/{rbd}")
-    public ResponseEntity<CursoMatriculaModel> obtenerCurso(@PathVariable int rbd) {
-        CursoMatriculaModel curso = cursoService.obtenerCurso(rbd);
+    public ResponseEntity<GrupoModel> obtenerCurso(@PathVariable int rbd) {
+        GrupoModel curso = cursoService.obtenerCurso(rbd);
         if (curso == null) {
             return ResponseEntity.status(404).build(); // Devuelve un status 404 si no se encuentra el curso
         }
@@ -57,14 +57,13 @@ public class DatosGrupoMatriculaController {
 
     // Obtener los datos de un curso usando múltiples parámetros
     @GetMapping("/{rbd}/ensenanza/{ensenanza}/grado/{grado}/letra/{letra}")
-    public ResponseEntity<CursoMatriculaModel> obtenerCursoConParametros(
+    public ResponseEntity<GrupoModel> obtenerCursoConParametros(
             @PathVariable Integer rbd,
-            @PathVariable Integer ensenanza,
             @PathVariable Integer grado,
             @PathVariable String letra) {
 
         // Llama al servicio que gestiona la lógica de negocio para obtener los datos del curso
-        CursoMatriculaModel curso = cursoService.obtenerCursoConParametros(rbd, ensenanza, grado, letra);
+        GrupoModel curso = cursoService.obtenerCursoConParametros(rbd, grado, letra);
 
         if (curso == null) {
             return ResponseEntity.status(404).build(); // Devuelve 404 si no se encuentra el curso

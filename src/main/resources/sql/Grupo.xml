@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cl.mineduc.sidep.datosgrupomatriculaapi.mappers.GrupoMapper">
+
+    <!-- Mapeo de resultados para el grupo -->
+    <resultMap id="grupoResultMap" type="cl.mineduc.sidep.datosgrupomatriculaapi.model.GrupoModel">
+        <id property="id" column="pk_grup_id_grupo"/>
+        <result property="letra" column="grup_letra"/>
+        <result property="cupo" column="grup_cupo"/>
+        <!-- eliminamos fechas ya que se manejan en la base de datos -->
+        <association property="jornada" javaType="cl.mineduc.sidep.datosgrupomatriculaapi.model.JornadaModel">
+            <id property="id" column="pk_jorn_id_jornada"/>
+            <result property="nombre" column="jorn_nombre"/>
+        </association>
+
+        <association property="grado" javaType="cl.mineduc.sidep.datosgrupomatriculaapi.model.GradoModel">
+            <id property="id" column="pk_grad_id_grado"/>
+            <result property="nombre" column="grad_nombre"/>
+        </association>
+    </resultMap>
+
+    <sql id="selectGrupo">
+        SELECT
+            g.pk_grup_id_grupo,
+            g.grup_letra,
+            g.grup_cupo,
+            j.pk_jorn_id_jornada,
+            j.jorn_nombre,
+            gr.pk_grad_id_grado,
+            gr.grad_nombre
+        FROM grupo g
+                 LEFT JOIN jornada j ON j.pk_jorn_id_jornada = g.fk_grup_id_jornada
+                 LEFT JOIN grado gr ON gr.pk_grad_id_grado = g.fk_grup_id_grado
+    </sql>
+
+    <!-- Inserción de un nuevo curso -->
+    <insert id="insertGrupo" parameterType="cl.mineduc.sidep.datosgrupomatriculaapi.model.GrupoModel"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="pk_grup_id_grupo">
+        INSERT INTO grupo
+        (
+            fk_grup_id_jornada,
+            fk_grup_id_grado,
+            grup_letra,
+            grup_cupo,
+            grup_fecha_creacion,
+            grup_fecha_actualizacion
+        )
+        VALUES
+            (
+                #{jornada},
+                #{grado},
+                #{letra},
+                #{cupo},
+                CURRENT_TIMESTAMP,
+                CURRENT_TIMESTAMP
+            )
+    </insert>
+
+    <!-- Actualización de un curso existente -->
+    <update id="updateGrupo" parameterType="cl.mineduc.sidep.datosgrupomatriculaapi.model.GrupoModel">
+        UPDATE grupo
+        SET
+            fk_grup_id_jornada = #{jornada},
+            fk_grup_id_grado = #{grado},
+            grup_letra = #{letra},
+            grup_cupo = #{cupo},
+            grup_fecha_actualizacion = CURRENT_TIMESTAMP
+        WHERE pk_grup_id_grupo = #{rbd}
+    </update>
+
+    <!-- Eliminación de un curso -->
+    <delete id="deleteGrupo" parameterType="int">
+        DELETE FROM grupo
+        WHERE pk_grup_id_grupo = #{rbd}
+    </delete>
+
+
+    <select id="getGrupoByParametros" resultMap="grupoResultMap" parameterType="int">
+        <include refid="selectGrupo"/>
+        WHERE g.pk_grup_id_grupo = #{rbd}
+    </select>
+
+</mapper>
