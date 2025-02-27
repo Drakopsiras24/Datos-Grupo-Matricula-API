@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cl.mineduc.sidep.datosgrupomatriculaapi.mappers.GradoMapper">
+
+    <insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="pk_grad_id_grado">
+        INSERT INTO grado (fk_grad_id_unidad_educativa, grad_fecha_creacion, fk_grad_id_nivel_grado)
+        VALUES(
+               #{g.unidadEducativa},
+               current_timestamp,
+               #{g.tipo})
+    </insert>
+
+    <select id="findAll" resultType="cl.mineduc.sidep.datosgrupomatriculaapi.model.GradoQueryModel">
+        select g.pk_grad_id_grado as id,
+        ue.uned_rbd as rbd,
+        ng.pk_nivel_grado_id as tipo,
+        ng.nivel_grado_nombre as tipoNombre
+        from grado g
+        inner join unidad_educativa ue on ue.pk_uned_id_unidad_educativa = g.fk_grad_id_unidad_educativa
+        inner join nivel_grado ng on ng.pk_nivel_grado_id = g.fk_grad_id_nivel_grado
+        WHERE TRUE
+        <if test="unidadEducativa != null">
+            AND g.fk_grad_id_unidad_educativa = #{unidadEducativa}
+        </if>
+        <if test="tipo != null">
+            AND g.fk_grad_id_nivel_grado = #{tipo}
+        </if>
+    </select>
+</mapper>
