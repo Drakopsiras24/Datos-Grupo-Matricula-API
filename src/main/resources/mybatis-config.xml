@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <!-- Configuración general de MyBatis -->
+    <settings>
+        <!-- Ajuste de algunas configuraciones de MyBatis -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <!-- Mapeo de los mappers -->
+    <mappers>
+        <!-- Mapeo de los mappers XML -->
+        <mapper resource="cl/mineduc/sidep/datosgrupomatriculaapi/mappers/grupo.xml"/>
+        C:\Users\halte\IdeaProjects\respaldo2\Datos-Grupo-Matricula-API\src\main\resources\sql\Grupo.xml
+    </mappers>
+</configuration>
