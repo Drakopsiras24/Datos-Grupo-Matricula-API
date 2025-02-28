@@ -18,4 +18,7 @@ public interface CursoService {
 
     // Agregar el nuevo método para obtener un curso con parámetros
     GrupoModel obtenerCursoConParametros(Integer rbd, Integer grado, String letra);
+
+    // Nuevo método para obtener el ID por RBD
+    Integer obtenerIdPorRbd(Integer rbd);  // Este es el método que vamos a agregar
 }

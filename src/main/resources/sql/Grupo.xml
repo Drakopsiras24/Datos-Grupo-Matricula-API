@@ -65,7 +65,7 @@
             grup_letra = #{letra},
             grup_cupo = #{cupo},
             grup_fecha_actualizacion = CURRENT_TIMESTAMP
-        WHERE pk_grup_id_grupo = #{rbd}
+        WHERE pk_grup_id_grupo = #{id}
     </update>
 
     <!-- Eliminación de un curso -->

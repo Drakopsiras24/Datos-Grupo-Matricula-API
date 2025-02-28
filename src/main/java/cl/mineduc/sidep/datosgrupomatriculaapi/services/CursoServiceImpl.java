@@ -46,4 +46,14 @@ public class CursoServiceImpl implements CursoService {
         // Buscamos el curso con parámetros específicos usando GrupoMapper
         return grupoMapper.getGrupoByParametros(rbd, grado, letra);
     }
+
+    @Override
+    public Integer obtenerIdPorRbd(Integer rbd) {
+        // Buscar el curso por su rbd en la base de datos
+        GrupoModel curso = grupoMapper.getGrupoByRBD(rbd);
+        if (curso != null) {
+            return curso.getRbd(); // Retornar el id si se encuentra el curso
+        }
+        throw new RuntimeException("Curso no encontrado para el RBD: " + rbd);
+    }
 }

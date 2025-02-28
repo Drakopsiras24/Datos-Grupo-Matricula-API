@@ -41,6 +41,13 @@ public class DatosGrupoMatriculaController {
     // Actualizar los datos de un curso
     @PutMapping
     public ResponseEntity<Void> actualizarCurso(@RequestBody GrupoModel curso) {
+        // Aquí puedes utilizar el rbd como el texto, y buscar el id correspondiente de la base de datos
+        Integer id = cursoService.obtenerIdPorRbd(curso.getRbd()); // Método que obtiene el id por rbd
+
+        // Asignamos el id al objeto antes de actualizarlo
+        curso.setRbd(id);
+
+        // Ahora actualizamos el curso con el id obtenido
         cursoService.actualizarCurso(curso);
         return ResponseEntity.ok().build(); // Devuelve un status 200 si el curso es actualizado
     }
