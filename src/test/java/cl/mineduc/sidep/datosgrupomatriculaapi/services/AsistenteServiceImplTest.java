@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.junit.Assert.*;
@@ -61,7 +62,7 @@ public class AsistenteServiceImplTest {
         asistente.setDv("9");
 
         // Configura el mock para lanzar una excepción
-        doThrow(new RuntimeException("Error en BD")).when(cursoAsistenteMapper).insertAsistente(any());
+        doThrow(MyBatisSystemException.class).when(cursoAsistenteMapper).insertAsistente(any());
 
         // Llama al método a probar
         boolean resultado = asistenteService.agregarAsistentes(asistente);

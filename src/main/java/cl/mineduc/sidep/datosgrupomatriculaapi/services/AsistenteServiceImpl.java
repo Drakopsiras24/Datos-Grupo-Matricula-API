@@ -2,11 +2,14 @@ package cl.mineduc.sidep.datosgrupomatriculaapi.services;
 
 import cl.mineduc.sidep.datosgrupomatriculaapi.model.AsistenteCurso;
 import cl.mineduc.sidep.datosgrupomatriculaapi.mappers.CursoAsistenteMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
 @Service
+@Slf4j
 public class AsistenteServiceImpl implements AsistenteService {
 
     private final CursoAsistenteMapper cursoAsistenteMapper;
@@ -19,11 +22,11 @@ public class AsistenteServiceImpl implements AsistenteService {
     @Override
     public boolean agregarAsistentes(AsistenteCurso.Asistente asistente) {
         try {
-            // Insertar el asistente individualmente
             cursoAsistenteMapper.insertAsistente(asistente);
-            return true; // Si la inserción es exitosa
-        } catch (Exception e) {
-            return false; // Si ocurre un error
+            return true;
+        } catch (MyBatisSystemException e) {
+            log.error(e.getMessage(), e);
+            return false;
         }
     }
 
