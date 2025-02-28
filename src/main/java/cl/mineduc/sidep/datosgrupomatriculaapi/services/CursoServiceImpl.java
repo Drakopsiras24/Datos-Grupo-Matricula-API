@@ -1,44 +1,59 @@
 package cl.mineduc.sidep.datosgrupomatriculaapi.services;
 
-import cl.mineduc.sidep.datosgrupomatriculaapi.model.CursoMatriculaModel;
-import cl.mineduc.sidep.datosgrupomatriculaapi.mappers.UnidadEducativaMapper;
+import cl.mineduc.sidep.datosgrupomatriculaapi.model.GrupoModel;
+import cl.mineduc.sidep.datosgrupomatriculaapi.mappers.GrupoMapper;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CursoServiceImpl implements CursoService {
 
-    private final UnidadEducativaMapper unidadEducativaMapper;
+    private final GrupoMapper grupoMapper;
 
-    public CursoServiceImpl(UnidadEducativaMapper unidadEducativaMapper) {
-        this.unidadEducativaMapper = unidadEducativaMapper;
+    // Constructor donde inyectamos el GrupoMapper
+    public CursoServiceImpl(GrupoMapper grupoMapper) {
+        this.grupoMapper = grupoMapper;
     }
 
-    // Métodos existentes
-    @Override
-    public void crearCurso(CursoMatriculaModel model) {
-        unidadEducativaMapper.insertUnidadEducativa(model);
-    }
+    // Métodos actualizados que ahora utilizan GrupoMapper
 
     @Override
-    public void actualizarCurso(CursoMatriculaModel model) {
-        unidadEducativaMapper.updateUnidadEducativa(model);
+    public void crearCurso(GrupoModel model) {
+        // Utilizamos GrupoMapper para insertar el nuevo curso
+        grupoMapper.insertGrupo(model);
     }
 
     @Override
-    public CursoMatriculaModel obtenerCurso(Integer rbd) {
-        return unidadEducativaMapper.getUnidadEducativaByRBD(rbd);
+    public void actualizarCurso(GrupoModel model) {
+        // Utilizamos GrupoMapper para actualizar el curso
+        grupoMapper.updateGrupo(model);
+    }
+
+    @Override
+    public GrupoModel obtenerCurso(Integer rbd) {
+        // Obtenemos el curso usando el GrupoMapper
+        return grupoMapper.getGrupoByRBD(rbd);
     }
 
     @Override
     public boolean eliminarCurso(int rbd) {
-        int rowsAffected = unidadEducativaMapper.deleteUnidadEducativa(rbd);  // Se guarda el número de filas afectadas
-        return rowsAffected > 0;  // Si hay filas afectadas, significa que se eliminó correctamente
+        // Elimina el curso utilizando el GrupoMapper
+        return grupoMapper.deleteGrupo(rbd) > 0;
     }
-
 
     // Implementamos el nuevo método para obtener un curso con parámetros
     @Override
-    public CursoMatriculaModel obtenerCursoConParametros(Integer rbd, Integer ensenanza, Integer grado, String letra) {
-        return unidadEducativaMapper.getUnidadEducativaByParametros(rbd, ensenanza, grado, letra);
+    public GrupoModel obtenerCursoConParametros(Integer rbd, Integer grado, String letra) {
+        // Buscamos el curso con parámetros específicos usando GrupoMapper
+        return grupoMapper.getGrupoByParametros(rbd, grado, letra);
+    }
+
+    @Override
+    public Integer obtenerIdPorRbd(Integer rbd) {
+        // Buscar el curso por su rbd en la base de datos
+        GrupoModel curso = grupoMapper.getGrupoByRBD(rbd);
+        if (curso != null) {
+            return curso.getRbd(); // Retornar el id si se encuentra el curso
+        }
+        throw new RuntimeException("Curso no encontrado para el RBD: " + rbd);
     }
 }
