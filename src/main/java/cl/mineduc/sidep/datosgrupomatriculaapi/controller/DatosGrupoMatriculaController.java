@@ -1,17 +1,22 @@
 package cl.mineduc.sidep.datosgrupomatriculaapi.controller;
 
 import cl.mineduc.sidep.datosgrupomatriculaapi.model.AsistenteCurso;
+import cl.mineduc.sidep.datosgrupomatriculaapi.model.GrupoCommandModel;
 import cl.mineduc.sidep.datosgrupomatriculaapi.model.GrupoModel;
 import cl.mineduc.sidep.datosgrupomatriculaapi.model.Matricula;
 import cl.mineduc.sidep.datosgrupomatriculaapi.services.AsistenteService;
 import cl.mineduc.sidep.datosgrupomatriculaapi.services.CursoService;
+import cl.mineduc.sidep.datosgrupomatriculaapi.services.GrupoService;
 import cl.mineduc.sidep.datosgrupomatriculaapi.services.MatriculaService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
 import lombok.RequiredArgsConstructor;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api-grupo-parv/v1/curso")
@@ -21,12 +26,12 @@ public class DatosGrupoMatriculaController {
     private final CursoService cursoService;
     private final AsistenteService asistenteService;
     private final MatriculaService matriculaService;
+    private final GrupoService grupoService;
 
-    // Ingresar un nuevo curso
     @PostMapping
-    public ResponseEntity<Void> crearCurso(@RequestBody GrupoModel curso) {
-        cursoService.crearCurso(curso);
-        return ResponseEntity.status(201).build(); // Devuelve un status 201 si el curso es creado
+    public ResponseEntity<Void> crearCurso(@RequestBody @Valid GrupoCommandModel curso) {
+        this.grupoService.crearCurso(curso);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     // Ingresar asistentes a un curso

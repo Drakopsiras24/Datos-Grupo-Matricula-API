@@ -5,11 +5,10 @@ import cl.mineduc.sidep.datosgrupomatriculaapi.exception.DatosGrupoMatriculaExce
 import cl.mineduc.sidep.datosgrupomatriculaapi.model.GradoCommandModel;
 import cl.mineduc.sidep.datosgrupomatriculaapi.model.GradoQueryModel;
 import cl.mineduc.sidep.datosgrupomatriculaapi.repositories.GradoRepository;
-import cl.mineduc.sidep.datosgrupomatriculaapi.repositories.GradoUnidadEducativaRepository;
+import cl.mineduc.sidep.datosgrupomatriculaapi.repositories.UnidadEducativaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -17,7 +16,7 @@ import java.util.List;
 public class GradoServiceImpl implements GradoService {
 
     private final GradoRepository gradoRepository;
-    private final GradoUnidadEducativaRepository  gradoUnidadEducativaRepository;
+    private final UnidadEducativaRepository gradoUnidadEducativaRepository;
 
     @Override
     public void save(GradoCommandModel g) {

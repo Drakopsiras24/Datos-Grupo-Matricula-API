@@ -12,4 +12,7 @@ public interface GradoMapper {
 
     List<GradoQueryModel> findAll(@Param("unidadEducativa") Long unidadEducativa, @Param("tipo") Long tipo);
 
+    Long findIdByTipoAndUnidadEducativa(@Param("tipo") Long tipo, @Param("unidadEducativa") Long unidadEducativa);
+
+
 }

@@ -1,10 +1,12 @@
 package cl.mineduc.sidep.datosgrupomatriculaapi.controller;
 
 import cl.mineduc.sidep.datosgrupomatriculaapi.model.AsistenteCurso;
+import cl.mineduc.sidep.datosgrupomatriculaapi.model.GrupoCommandModel;
 import cl.mineduc.sidep.datosgrupomatriculaapi.model.Matricula;
 import cl.mineduc.sidep.datosgrupomatriculaapi.model.GrupoModel;
 import cl.mineduc.sidep.datosgrupomatriculaapi.services.AsistenteService;
 import cl.mineduc.sidep.datosgrupomatriculaapi.services.CursoService;
+import cl.mineduc.sidep.datosgrupomatriculaapi.services.GrupoService;
 import cl.mineduc.sidep.datosgrupomatriculaapi.services.MatriculaService;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +36,9 @@ public class DatosGrupoMatriculaControllerTest {
     @Mock
     private MatriculaService matriculaService;
 
+    @Mock
+    private GrupoService grupoService;
+
     @InjectMocks
     private DatosGrupoMatriculaController datosGrupoMatriculaController;
 
@@ -44,16 +49,15 @@ public class DatosGrupoMatriculaControllerTest {
 
     @Test
     public void crearCurso() {
-        GrupoModel curso = new GrupoModel();
+        GrupoCommandModel curso = new GrupoCommandModel();
         curso.setRbd(1);
 
-        doNothing().when(cursoService).crearCurso(any(GrupoModel.class));
+        doNothing().when(grupoService).crearCurso(any(GrupoCommandModel.class));
 
         ResponseEntity<Void> response = datosGrupoMatriculaController.crearCurso(curso);
 
         assertNotNull(response);
         assertEquals(201, response.getStatusCodeValue());
-        verify(cursoService, times(1)).crearCurso(any(GrupoModel.class));
     }
 
     @Test

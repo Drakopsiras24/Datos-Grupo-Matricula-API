@@ -2,6 +2,7 @@ package cl.mineduc.sidep.datosgrupomatriculaapi.exception;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -48,7 +49,7 @@ public class ExceptionController {
         e.getBindingResult()
                 .getAllErrors()
                 .forEach(error -> {
-                    String fieldName = error.getObjectName();
+                    String fieldName = ((FieldError) error).getField();
                     String errorMessage = error.getDefaultMessage();
                     errors.put(fieldName, errorMessage);
                 });

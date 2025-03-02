@@ -27,4 +27,11 @@
             AND g.fk_grad_id_nivel_grado = #{tipo}
         </if>
     </select>
+
+    <select id="findIdByTipoAndUnidadEducativa" resultType="java.lang.Long">
+        SELECT g.pk_grad_id_grado
+        FROM grado g
+        WHERE g.fk_grad_id_unidad_educativa = #{unidadEducativa}
+        AND g.fk_grad_id_nivel_grado = #{tipo}
+    </select>
 </mapper>

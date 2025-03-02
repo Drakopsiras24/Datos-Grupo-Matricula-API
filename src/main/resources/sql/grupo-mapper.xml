@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cl.mineduc.sidep.datosgrupomatriculaapi.mappers.GrupoDatabaseMapper">
+
+    <insert id="save" useGeneratedKeys="true" keyColumn="pk_grup_id_grupo" keyProperty="id" parameterType="cl.mineduc.sidep.datosgrupomatriculaapi.entities.GrupoEntity">
+        INSERT INTO grupo(fk_grup_id_jornada, fk_grup_id_grado, grup_letra, grup_cupo, grup_fecha_creacion)
+        VALUES (
+                #{jornada},
+                #{grado},
+                #{letra},
+                #{cupo},
+                current_timestamp);
+    </insert>
+</mapper>

@@ -4,7 +4,6 @@ import cl.mineduc.sidep.datosgrupomatriculaapi.model.GrupoModel;
 
 public interface CursoService {
 
-    // Método para crear un curso
     void crearCurso(GrupoModel model);
 
     // Método para actualizar un curso

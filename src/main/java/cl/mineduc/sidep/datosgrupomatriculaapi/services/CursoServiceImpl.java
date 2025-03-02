@@ -14,11 +14,8 @@ public class CursoServiceImpl implements CursoService {
         this.grupoMapper = grupoMapper;
     }
 
-    // Métodos actualizados que ahora utilizan GrupoMapper
-
     @Override
     public void crearCurso(GrupoModel model) {
-        // Utilizamos GrupoMapper para insertar el nuevo curso
         grupoMapper.insertGrupo(model);
     }
 

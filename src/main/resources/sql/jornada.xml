@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cl.mineduc.sidep.datosgrupomatriculaapi.mappers.JornadaMapper">
+
+    <select id="findByUnidadEducativaAndTipo" resultType="java.lang.Long">
+        SELECT jornada.pk_jorn_id_jornada
+        FROM jornada
+        where jornada.fk_jorn_id_unidad_educativa = #{ue}
+        AND jornada.fk_jorn_id_tipo_jornada = #{t};
+    </select>
+</mapper>

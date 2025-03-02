@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cl.mineduc.sidep.datosgrupomatriculaapi.mappers.PlantaMapper">
+
+    <select id="findIdByFuncionario" resultType="java.lang.Long">
+        SELECT pk_plan_id_planta
+        FROM planta
+        WHERE fk_plan_id_funcionario = #{funcionario}
+        AND fk_plan_id_unidad_educativa = #{unidadEducativa}
+    </select>
+
+</mapper>

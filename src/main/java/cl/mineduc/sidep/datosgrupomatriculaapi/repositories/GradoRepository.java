@@ -11,4 +11,6 @@ public interface GradoRepository {
 
     List<GradoQueryModel> findByParams(Long unidadEducativa, Long tipo);
 
+    Long findByTipoAndUnidadEducativa(Long tipo, Long unidadEducativa);
+
 }

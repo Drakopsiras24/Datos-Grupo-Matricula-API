@@ -39,5 +39,15 @@ public class GradoRepositoryImpl implements GradoRepository {
         }
     }
 
+    @Override
+    public Long findByTipoAndUnidadEducativa(Long tipo, Long unidadEducativa) {
+        try {
+            return this.gradoMapper.findIdByTipoAndUnidadEducativa(tipo, unidadEducativa);
+        } catch (MyBatisSystemException e) {
+            log.error("Error al consultar Grados", e);
+            throw new DatosGrupoMatriculaException(String.format("Error al consultar grado: %s", e.getMessage()), e);
+        }
+    }
+
 
 }
