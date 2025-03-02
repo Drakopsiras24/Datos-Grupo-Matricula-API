@@ -3,10 +3,14 @@ package cl.mineduc.sidep.datosgrupomatriculaapi.repositories;
 import cl.mineduc.sidep.datosgrupomatriculaapi.entities.PlantaGrupoEntity;
 import cl.mineduc.sidep.datosgrupomatriculaapi.exception.DatosGrupoMatriculaException;
 import cl.mineduc.sidep.datosgrupomatriculaapi.mappers.PlantaGrupoMapper;
+import cl.mineduc.sidep.datosgrupomatriculaapi.model.Asistente;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.stereotype.Repository;
+
+import java.util.Collections;
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -21,6 +25,16 @@ public class PlantaGrupoRepositoryImpl implements PlantaGrupoRepository {
         } catch (MyBatisSystemException e) {
             log.error(e.getMessage(), e);
             throw new DatosGrupoMatriculaException(String.format("Error al guardar en Planta Grupo: %s", e.getMessage()), e);
+        }
+    }
+
+    @Override
+    public List<Asistente> findAsistentes(Integer rbd, Long grupo) {
+        try {
+            return this.mapper.findAsistentes(rbd, grupo);
+        } catch (MyBatisSystemException e) {
+            log.error(e.getMessage(), e);
+            throw new DatosGrupoMatriculaException(String.format("Error al consultar en Planta Grupo: %s", e.getMessage()), e);
         }
     }
 

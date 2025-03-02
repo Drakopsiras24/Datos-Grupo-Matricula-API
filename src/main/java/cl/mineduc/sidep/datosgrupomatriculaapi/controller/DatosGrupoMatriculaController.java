@@ -1,9 +1,6 @@
 package cl.mineduc.sidep.datosgrupomatriculaapi.controller;
 
-import cl.mineduc.sidep.datosgrupomatriculaapi.model.AsistenteCurso;
-import cl.mineduc.sidep.datosgrupomatriculaapi.model.GrupoCommandModel;
-import cl.mineduc.sidep.datosgrupomatriculaapi.model.GrupoModel;
-import cl.mineduc.sidep.datosgrupomatriculaapi.model.Matricula;
+import cl.mineduc.sidep.datosgrupomatriculaapi.model.*;
 import cl.mineduc.sidep.datosgrupomatriculaapi.services.AsistenteService;
 import cl.mineduc.sidep.datosgrupomatriculaapi.services.CursoService;
 import cl.mineduc.sidep.datosgrupomatriculaapi.services.GrupoService;
@@ -19,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api-grupo-parv/v1/curso")
+@RequestMapping("/curso")
 @RequiredArgsConstructor
 public class DatosGrupoMatriculaController {
 
@@ -34,13 +31,10 @@ public class DatosGrupoMatriculaController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    // Ingresar asistentes a un curso
     @PostMapping("/asistente")
-    public ResponseEntity<Void> agregarAsistentes(@RequestBody AsistenteCurso asistenteCurso) {
-        for (AsistenteCurso.Asistente asistente : asistenteCurso.getAsistentes()) {
-            asistenteService.agregarAsistentes(asistente);
-        }
-        return ResponseEntity.status(201).build(); // Devuelve un status 201 si los asistentes son agregados
+    public ResponseEntity<Void> agregarAsistentes(@RequestBody @Valid AsistenteCommandModel model) {
+        this.grupoService.saveAsistentes(model);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     // Actualizar los datos de un curso
@@ -57,14 +51,9 @@ public class DatosGrupoMatriculaController {
         return ResponseEntity.ok().build(); // Devuelve un status 200 si el curso es actualizado
     }
 
-    // Obtener los datos de un curso por su RBD
     @GetMapping("/{rbd}")
-    public ResponseEntity<GrupoModel> obtenerCurso(@PathVariable int rbd) {
-        GrupoModel curso = cursoService.obtenerCurso(rbd);
-        if (curso == null) {
-            return ResponseEntity.status(404).build(); // Devuelve un status 404 si no se encuentra el curso
-        }
-        return ResponseEntity.ok(curso); // Devuelve los datos del curso si se encuentra
+    public ResponseEntity<List<GrupoQueryModel>> obtenerCurso(@PathVariable Integer rbd) {
+        return ResponseEntity.ok(this.grupoService.findByRbd(rbd));
     }
 
     // Obtener los datos de un curso usando múltiples parámetros

@@ -5,7 +5,9 @@ import cl.mineduc.sidep.datosgrupomatriculaapi.entities.PlantaGrupoEntity;
 import cl.mineduc.sidep.datosgrupomatriculaapi.enums.TipoJornada;
 import cl.mineduc.sidep.datosgrupomatriculaapi.exception.DatosGrupoMatriculaException;
 import cl.mineduc.sidep.datosgrupomatriculaapi.model.Asistente;
+import cl.mineduc.sidep.datosgrupomatriculaapi.model.AsistenteCommandModel;
 import cl.mineduc.sidep.datosgrupomatriculaapi.model.GrupoCommandModel;
+import cl.mineduc.sidep.datosgrupomatriculaapi.model.GrupoQueryModel;
 import cl.mineduc.sidep.datosgrupomatriculaapi.repositories.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +15,9 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -43,6 +48,7 @@ public class GrupoServiceImplTest {
     private GrupoServiceImpl grupoService;
 
     private final GrupoCommandModel model = new GrupoCommandModel();
+    private final AsistenteCommandModel amodel = new AsistenteCommandModel();
 
     @Before
     public void init() {
@@ -57,6 +63,12 @@ public class GrupoServiceImplTest {
         model.setJornada(TipoJornada.MANANA);
         model.setCupo(20);
         model.setEducador(educador);
+
+        amodel.setRbd(1);
+        amodel.setJornada(TipoJornada.MANANA);
+        amodel.setLetra("A");
+        amodel.setGrado(1L);
+        amodel.setAsistentes(Collections.emptyList());
 
     }
 
@@ -225,6 +237,239 @@ public class GrupoServiceImplTest {
         this.grupoService.crearCurso(model);
 
         verify(plantaGrupoRepository).save(any(PlantaGrupoEntity.class));
+    }
+
+    @Test
+    public void shouldReturnGrupos() {
+        when(this.grupoService.findByRbd(anyInt()))
+                .thenReturn(Collections.emptyList());
+        assertNotNull(this.grupoService.findByRbd(1));
+    }
+
+    @Test
+    public void shouldLookForAsistentesWhenSearchingGrupos() {
+
+        GrupoQueryModel  grupoQueryModel = new GrupoQueryModel();
+        grupoQueryModel.setId(1L);
+        grupoQueryModel.setRbd(1);
+        grupoQueryModel.setCupo(10);
+        grupoQueryModel.setLetra("A");
+        grupoQueryModel.setJornada("MANANA");
+        grupoQueryModel.setGrado("Cierto Grado");
+
+        when(this.grupoService.findByRbd(anyInt()))
+                .thenReturn(Collections.singletonList(grupoQueryModel));
+
+        when(plantaGrupoRepository.findAsistentes(anyInt(), anyLong()))
+                .thenReturn(Collections.emptyList());
+        this.grupoService.findByRbd(1);
+        verify(plantaGrupoRepository).findAsistentes(anyInt(), anyLong());
+
+    }
+
+    @Test
+    public void shouldReturnIdWhenSearchingGrupos() {
+
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        this.grupoService.saveAsistentes(amodel);
+        verify(grupoRepository).findIdGrupo(anyLong(), anyLong(), anyInt(), anyString());
+    }
+
+
+    @Test(expected = DatosGrupoMatriculaException.class)
+    public void shouldThrownExceptionWhenGrupoNotFound() {
+
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(null);
+        this.grupoService.saveAsistentes(amodel);
+
+    }
+
+    @Test
+    public void shouldFindPersonaWhenSavingAsistentes() {
+
+        Asistente asistente = new Asistente();
+        asistente.setRut(1);
+        asistente.setDv("9");
+
+        ArrayList<Asistente> asistentes = new ArrayList<>();
+        asistentes.add(asistente);
+        asistentes.add(asistente);
+        asistentes.add(asistente);
+        asistentes.add(asistente);
+
+        amodel.setAsistentes(asistentes);
+
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(personaRepository.findByRut(anyInt())).thenReturn(1L);
+
+        this.grupoService.saveAsistentes(amodel);
+        verify(personaRepository, times(4)).findByRut(anyInt());
+
+    }
+
+    @Test(expected = DatosGrupoMatriculaException.class)
+    public void shouldReturnExceptionWhenSavingAsistenteAndPersonaIsNotFound() {
+        Asistente asistente = new Asistente();
+        asistente.setRut(1);
+        asistente.setDv("9");
+
+        ArrayList<Asistente> asistentes = new ArrayList<>();
+        asistentes.add(asistente);
+        amodel.setAsistentes(asistentes);
+
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(personaRepository.findByRut(anyInt())).thenReturn(null);
+        this.grupoService.saveAsistentes(amodel);
+    }
+
+    @Test
+    public void shouldFindFuncionarioWhenSavingAsistentes() {
+        Asistente asistente = new Asistente();
+        asistente.setRut(1);
+        asistente.setDv("9");
+
+        ArrayList<Asistente> asistentes = new ArrayList<>();
+        asistentes.add(asistente);
+        asistentes.add(asistente);
+        asistentes.add(asistente);
+        asistentes.add(asistente);
+
+        amodel.setAsistentes(asistentes);
+
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(personaRepository.findByRut(anyInt())).thenReturn(1L);
+        when(funcionarioRepository.findByPersona(anyLong())).thenReturn(1L);
+
+        this.grupoService.saveAsistentes(amodel);
+        verify(funcionarioRepository, times(4)).findByPersona(anyLong());
+    }
+
+    @Test(expected = DatosGrupoMatriculaException.class)
+    public void shouldThrownExceptionWhenSavingAsistentesAndFuncionarioNotFound() {
+        Asistente asistente = new Asistente();
+        asistente.setRut(1);
+        asistente.setDv("9");
+
+        ArrayList<Asistente> asistentes = new ArrayList<>();
+        asistentes.add(asistente);
+        amodel.setAsistentes(asistentes);
+
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(personaRepository.findByRut(anyInt())).thenReturn(1L);
+        when(funcionarioRepository.findByPersona(anyLong())).thenReturn(null);
+        this.grupoService.saveAsistentes(amodel);
+    }
+
+    @Test
+    public void shouldFindUnidadEducativaWhenSavingAsistente() {
+
+        Asistente asistente = new Asistente();
+        asistente.setRut(1);
+        asistente.setDv("9");
+
+        ArrayList<Asistente> asistentes = new ArrayList<>();
+        asistentes.add(asistente);
+        amodel.setAsistentes(asistentes);
+
+        when(unidadEducativaRepository.findIdUnidadEducativaByRbd(anyInt()))
+                .thenReturn(1L);
+
+        this.grupoService.saveAsistentes(amodel);
+        verify(unidadEducativaRepository).findIdUnidadEducativaByRbd(anyInt());
+
+    }
+
+    @Test(expected = DatosGrupoMatriculaException.class)
+    public void shouldThrownExceptionWhenSavingAsistentesAndUnidadEducativaNotFound() {
+        Asistente asistente = new Asistente();
+        asistente.setRut(1);
+        asistente.setDv("9");
+
+        ArrayList<Asistente> asistentes = new ArrayList<>();
+        asistentes.add(asistente);
+        amodel.setAsistentes(asistentes);
+
+        when(unidadEducativaRepository.findIdUnidadEducativaByRbd(anyInt()))
+                .thenReturn(null);
+
+        this.grupoService.saveAsistentes(amodel);
+    }
+
+    @Test
+    public void shouldFindPlantaWhenSavingAsistentes() {
+        Asistente asistente = new Asistente();
+        asistente.setRut(1);
+        asistente.setDv("9");
+
+        ArrayList<Asistente> asistentes = new ArrayList<>();
+        asistentes.add(asistente);
+        amodel.setAsistentes(asistentes);
+
+        when(unidadEducativaRepository.findIdUnidadEducativaByRbd(anyInt()))
+                .thenReturn(1L);
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(personaRepository.findByRut(anyInt())).thenReturn(1L);
+        when(funcionarioRepository.findByPersona(anyLong())).thenReturn(1L);
+        when(plantaRepository.findByFuncionario(anyLong(), anyLong())).thenReturn(1L);
+
+        this.grupoService.saveAsistentes(amodel);
+        verify(plantaRepository).findByFuncionario(anyLong(), anyLong());
+    }
+
+    @Test(expected = DatosGrupoMatriculaException.class)
+    public void shouldThrownExceptionWhenSavingAsistentesAndPlantaNotFound() {
+        Asistente asistente = new Asistente();
+        asistente.setRut(1);
+        asistente.setDv("9");
+
+        ArrayList<Asistente> asistentes = new ArrayList<>();
+        asistentes.add(asistente);
+        amodel.setAsistentes(asistentes);
+
+        when(unidadEducativaRepository.findIdUnidadEducativaByRbd(anyInt()))
+                .thenReturn(1L);
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(personaRepository.findByRut(anyInt())).thenReturn(1L);
+        when(funcionarioRepository.findByPersona(anyLong())).thenReturn(1L);
+        when(plantaRepository.findByFuncionario(anyLong(), anyLong())).thenReturn(null);
+
+        this.grupoService.saveAsistentes(amodel);
+    }
+
+    @Test
+    public void shouldSavePlantaGrupoWhenSavingAsistentes() {
+        Asistente asistente = new Asistente();
+        asistente.setRut(1);
+        asistente.setDv("9");
+
+        ArrayList<Asistente> asistentes = new ArrayList<>();
+        asistentes.add(asistente);
+        asistentes.add(asistente);
+        asistentes.add(asistente);
+        asistentes.add(asistente);
+
+        amodel.setAsistentes(asistentes);
+
+        when(unidadEducativaRepository.findIdUnidadEducativaByRbd(anyInt()))
+                .thenReturn(1L);
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(personaRepository.findByRut(anyInt())).thenReturn(1L);
+        when(funcionarioRepository.findByPersona(anyLong())).thenReturn(1L);
+        when(plantaRepository.findByFuncionario(anyLong(), anyLong())).thenReturn(1L);
+        doNothing().when(plantaGrupoRepository).save(any(PlantaGrupoEntity.class));
+
+        this.grupoService.saveAsistentes(amodel);
+        verify(plantaGrupoRepository, times(4)).save(any(PlantaGrupoEntity.class));
+
     }
 
 

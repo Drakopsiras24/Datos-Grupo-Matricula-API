@@ -10,8 +10,11 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mybatis.spring.MyBatisSystemException;
 
+import java.util.Collections;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PlantaGrupoRepositoryImplTest {
@@ -33,6 +36,20 @@ public class PlantaGrupoRepositoryImplTest {
     public void shouldReturnExceptionWhenSaving() {
         doThrow(MyBatisSystemException.class).when(mapper).save(any(PlantaGrupoEntity.class));
         this.repository.save(new PlantaGrupoEntity());
+    }
+
+    @Test
+    public void shouldReturnAsistentes() {
+        when(mapper.findAsistentes(anyInt(), anyLong()))
+                .thenReturn(Collections.emptyList());
+        assertNotNull(this.repository.findAsistentes(1, 1L));
+    }
+
+    @Test(expected = DatosGrupoMatriculaException.class)
+    public void shouldThrownExceptionWhenFindingAsistentes() {
+        when(mapper.findAsistentes(anyInt(), anyLong()))
+                .thenThrow(MyBatisSystemException.class);
+        this.repository.findAsistentes(1, 1L);
     }
 
 }

@@ -1,9 +1,7 @@
 package cl.mineduc.sidep.datosgrupomatriculaapi.controller;
 
-import cl.mineduc.sidep.datosgrupomatriculaapi.model.AsistenteCurso;
-import cl.mineduc.sidep.datosgrupomatriculaapi.model.GrupoCommandModel;
-import cl.mineduc.sidep.datosgrupomatriculaapi.model.Matricula;
-import cl.mineduc.sidep.datosgrupomatriculaapi.model.GrupoModel;
+import cl.mineduc.sidep.datosgrupomatriculaapi.enums.TipoJornada;
+import cl.mineduc.sidep.datosgrupomatriculaapi.model.*;
 import cl.mineduc.sidep.datosgrupomatriculaapi.services.AsistenteService;
 import cl.mineduc.sidep.datosgrupomatriculaapi.services.CursoService;
 import cl.mineduc.sidep.datosgrupomatriculaapi.services.GrupoService;
@@ -62,19 +60,28 @@ public class DatosGrupoMatriculaControllerTest {
 
     @Test
     public void agregarAsistentes() {
-        AsistenteCurso asistenteCurso = new AsistenteCurso();
-        AsistenteCurso.Asistente asistente = new AsistenteCurso.Asistente();
-        asistente.setRut(12345678);
-        asistenteCurso.setAsistentes(Collections.singletonList(asistente));
 
-        // ✅ Cambio aquí: usar doNothing() para métodos void
-        when(asistenteService.agregarAsistentes(any())).thenReturn(true); // Suponiendo que retorna `true` si es exitoso
+        AsistenteCommandModel amodel = new  AsistenteCommandModel();
+        amodel.setRbd(1);
+        amodel.setJornada(TipoJornada.MANANA);
+        amodel.setLetra("A");
+        amodel.setGrado(1L);
 
-        ResponseEntity<Void> response = datosGrupoMatriculaController.agregarAsistentes(asistenteCurso);
+        Asistente asistente = new Asistente();
+        asistente.setRut(1);
+        asistente.setDv("9");
 
-        assertNotNull(response);
-        assertEquals(201, response.getStatusCodeValue());
-        verify(asistenteService, times(1)).agregarAsistentes(any());
+        ArrayList<Asistente> asistentes = new ArrayList<>();
+        asistentes.add(asistente);
+        asistentes.add(asistente);
+        asistentes.add(asistente);
+        asistentes.add(asistente);
+
+        amodel.setAsistentes(asistentes);
+
+        doNothing().when(grupoService).saveAsistentes(any(AsistenteCommandModel.class));
+        this.datosGrupoMatriculaController.agregarAsistentes(amodel);
+        verify(this.grupoService).saveAsistentes(any(AsistenteCommandModel.class));
     }
 
 
@@ -97,27 +104,14 @@ public class DatosGrupoMatriculaControllerTest {
 
     @Test
     public void obtenerCurso() {
-        GrupoModel curso = new GrupoModel();
+        GrupoQueryModel curso = new GrupoQueryModel();
         curso.setRbd(1);
 
-        when(cursoService.obtenerCurso(anyInt())).thenReturn(curso);
+        when(grupoService.findByRbd(anyInt())).thenReturn(Collections.singletonList(curso));
+        assertNotNull(datosGrupoMatriculaController.obtenerCurso(1));
 
-        ResponseEntity<GrupoModel> response = datosGrupoMatriculaController.obtenerCurso(1);
-
-        assertNotNull(response);
-        assertNotNull(response.getBody());
-        assertEquals(200, response.getStatusCodeValue());
-        verify(cursoService, times(1)).obtenerCurso(anyInt());
     }
 
-    @Test
-    public void obtenerCursoNoEncontrado() {
-        when(cursoService.obtenerCurso(anyInt())).thenReturn(null);
-
-        ResponseEntity<GrupoModel> response = datosGrupoMatriculaController.obtenerCurso(1);
-
-        assertEquals(404, response.getStatusCodeValue());
-    }
 
     @Test
     public void eliminarCurso() {

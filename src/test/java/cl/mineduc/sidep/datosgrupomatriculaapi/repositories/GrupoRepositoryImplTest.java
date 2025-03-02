@@ -10,6 +10,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mybatis.spring.MyBatisSystemException;
 
+import java.util.Collections;
+
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -34,6 +36,34 @@ public class GrupoRepositoryImplTest {
     public void shouldReturnException() {
         doThrow(MyBatisSystemException.class).when(mapper).save(any(GrupoEntity.class));
         this.grupoRepository.save(new GrupoEntity());
+    }
+
+    @Test
+    public void shouldReturnGrupos() {
+        when(mapper.findModelByRbd(anyInt()))
+                .thenReturn(Collections.emptyList());
+        assertNotNull(this.grupoRepository.findModelByRbd(1));
+    }
+
+    @Test(expected = DatosGrupoMatriculaException.class)
+    public void shouldThrownExceptionWhenLookingForGrupos() {
+        when(mapper.findModelByRbd(anyInt()))
+                .thenThrow(MyBatisSystemException.class);
+        this.grupoRepository.findModelByRbd(1);
+    }
+
+    @Test
+    public void shouldReturnID() {
+        when(mapper.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        assertNotNull(this.grupoRepository.findIdGrupo(1L, 1L, 1, "A"));
+    }
+
+    @Test(expected = DatosGrupoMatriculaException.class)
+    public void shouldThrowExceptionWhenLookingForGrupos() {
+        when(mapper.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenThrow(MyBatisSystemException.class);
+        this.grupoRepository.findIdGrupo(1L, 1L, 1, "A");
     }
 
 }

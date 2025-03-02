@@ -6,12 +6,19 @@ import cl.mineduc.sidep.datosgrupomatriculaapi.entities.PlantaGrupoEntity;
 import cl.mineduc.sidep.datosgrupomatriculaapi.enums.RolPlanta;
 import cl.mineduc.sidep.datosgrupomatriculaapi.enums.TipoJornada;
 import cl.mineduc.sidep.datosgrupomatriculaapi.exception.DatosGrupoMatriculaException;
+import cl.mineduc.sidep.datosgrupomatriculaapi.model.Asistente;
+import cl.mineduc.sidep.datosgrupomatriculaapi.model.AsistenteCommandModel;
 import cl.mineduc.sidep.datosgrupomatriculaapi.model.GrupoCommandModel;
 
+import cl.mineduc.sidep.datosgrupomatriculaapi.model.GrupoQueryModel;
 import cl.mineduc.sidep.datosgrupomatriculaapi.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -56,6 +63,43 @@ public class GrupoServiceImpl implements GrupoService {
 
     }
 
+    @Override
+    public List<GrupoQueryModel> findByRbd(Integer rbd) {
+
+        List<GrupoQueryModel> grupos = this.grupoRepository.findModelByRbd(rbd);
+        for (GrupoQueryModel grupo : grupos) {
+            grupo.setAsistentes(this.plantaGrupoRepository.findAsistentes(rbd, grupo.getId()));
+        }
+
+        return grupos;
+    }
+
+    @Transactional
+    @Override
+    public void saveAsistentes(AsistenteCommandModel model) {
+
+        Long unidadEducativa = this.findUnidadEducativaByRbd(model.getRbd());
+
+        Long grupo = this.grupoRepository.findIdGrupo(model.getGrado(), model.getJornada().getId(), model.getRbd(), model.getLetra());
+        if (grupo == null) {
+            throw new DatosGrupoMatriculaException("Grupo no encontrado");
+        }
+
+        for (Asistente asistente : model.getAsistentes()) {
+            Long persona = this.findPersona(asistente.getRut());
+            Long funcionario = this.findFuncionario(persona);
+            Long planta = this.findPlanta(funcionario, unidadEducativa);
+
+            PlantaGrupoEntity entity = new PlantaGrupoEntity();
+            entity.setGrupo(grupo);
+            entity.setPlanta(planta);
+            entity.setRol(RolPlanta.ASISTENTE.getId());
+
+            this.plantaGrupoRepository.save(entity);
+
+        }
+
+    }
 
     private Long findUnidadEducativaByRbd(Integer rbd) {
         Long unidadEducativa = this.unidadEducativaRepository.findIdUnidadEducativaByRbd(rbd);

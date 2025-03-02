@@ -3,6 +3,11 @@
 
 <mapper namespace="cl.mineduc.sidep.datosgrupomatriculaapi.mappers.PlantaGrupoMapper">
 
+    <resultMap id="asistenteModel" type="cl.mineduc.sidep.datosgrupomatriculaapi.model.Asistente">
+        <result property="rut" column="pers_rut" />
+        <result property="dv" column="pers_dv" />
+    </resultMap>
+
     <insert id="save" parameterType="cl.mineduc.sidep.datosgrupomatriculaapi.entities.PlantaGrupoEntity">
         INSERT INTO planta_grupo (fk_plgr_planta_id, fk_plgr_grupo_id, fk_plgr_rol_grupo_id, plgr_fecha_creacion)
         VALUES (#{planta},
@@ -10,4 +15,16 @@
                 #{rol},
                 current_timestamp);
     </insert>
+    <select id="findAsistentes" resultMap="asistenteModel">
+        select p.pers_rut, p.pers_dv
+        from persona p
+                 inner join funcionario f on f.fk_fnci_id_persona = p.pk_pers_id_persona
+                 inner join planta p2 on p2.fk_plan_id_funcionario = f.pk_fnci_id_funcionario
+                 inner join unidad_educativa ue on ue.pk_uned_id_unidad_educativa = p2.fk_plan_id_unidad_educativa
+                 inner join planta_grupo pg on pg.fk_plgr_planta_id = p2.pk_plan_id_planta
+                 inner join grupo g on g.pk_grup_id_grupo = pg.fk_plgr_grupo_id
+        where ue.uned_rbd = #{rbd}
+          and g.pk_grup_id_grupo = #{grupo}
+        and pg.fk_plgr_rol_grupo_id = 2
+    </select>
 </mapper>
