@@ -53,6 +53,30 @@
           and ue.uned_rbd = #{rbd}
           and g.fk_grup_id_jornada = #{jornada}
     </select>
+    <select id="findByRbdAndGradoAndLetra" resultMap="queryModel">
+        select g.pk_grup_id_grupo,
+               ue.uned_rbd,
+               ng.nivel_grado_nombre,
+               g.grup_letra,
+               tj.tijo_nombre,
+               g.grup_cupo,
+               p2.pers_rut,
+               p2.pers_dv
+        from grupo g
+                 inner join grado grad on grad.pk_grad_id_grado = g.fk_grup_id_grado
+                 inner join nivel_grado ng on ng.pk_nivel_grado_id = grad.fk_grad_id_nivel_grado
+                 inner join jornada j on j.pk_jorn_id_jornada = g.fk_grup_id_jornada
+                 inner join tipo_jornada tj on tj.pk_tijo_id_tipo_jornada = j.fk_jorn_id_tipo_jornada
+                 inner join unidad_educativa ue on ue.pk_uned_id_unidad_educativa = grad.fk_grad_id_unidad_educativa
+                 inner join planta_grupo pg on pg.fk_plgr_grupo_id = g.pk_grup_id_grupo
+                 inner join planta p on p.pk_plan_id_planta = pg.fk_plgr_planta_id
+                 inner join funcionario f on f.pk_fnci_id_funcionario = p.fk_plan_id_funcionario
+                 inner join persona p2 on p2.pk_pers_id_persona = f.fk_fnci_id_persona
+        where ue.uned_rbd = #{rbd}
+          and g.grup_letra = #{letra}
+          and ng.pk_nivel_grado_id = #{grado}
+          and pg.fk_plgr_rol_grupo_id = 1
+    </select>
 
     <insert id="save" useGeneratedKeys="true" keyColumn="pk_grup_id_grupo" keyProperty="id" parameterType="cl.mineduc.sidep.datosgrupomatriculaapi.entities.GrupoEntity">
         INSERT INTO grupo(fk_grup_id_jornada, fk_grup_id_grado, grup_letra, grup_cupo, grup_fecha_creacion)

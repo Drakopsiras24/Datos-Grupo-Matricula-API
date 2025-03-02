@@ -15,4 +15,6 @@ public interface GrupoRepository {
 
     void update(GrupoEntity entity, Long id);
 
+    List<GrupoQueryModel> findByRbdAndGradoAndLetra(Integer rbd, Long grado, String letra);
+
 }

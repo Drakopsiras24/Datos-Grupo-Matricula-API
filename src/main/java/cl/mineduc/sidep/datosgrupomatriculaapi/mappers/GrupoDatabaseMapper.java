@@ -18,6 +18,8 @@ public interface GrupoDatabaseMapper {
             @Param("rbd") Integer rbd,
             @Param("letra") String letra);
 
+    List<GrupoQueryModel> findByRbdAndGradoAndLetra(@Param("rbd") Integer rbd, @Param("grado") Long grado, @Param("letra") String letra);
+
     void update(@Param("g") GrupoEntity g, @Param("id") Long id);
 
 }

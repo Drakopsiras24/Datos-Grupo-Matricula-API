@@ -49,7 +49,7 @@ public class DatosGrupoMatriculaController {
     }
 
     // Obtener los datos de un curso usando múltiples parámetros
-    @GetMapping("/{rbd}/ensenanza/{ensenanza}/grado/{grado}/letra/{letra}")
+    @GetMapping("/{rbd}/grado/{grado}/letra/{letra}")
     public ResponseEntity<GrupoModel> obtenerCursoConParametros(
             @PathVariable Integer rbd,
             @PathVariable Integer grado,

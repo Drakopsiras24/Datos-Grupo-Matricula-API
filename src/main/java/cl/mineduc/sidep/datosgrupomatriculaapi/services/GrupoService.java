@@ -16,4 +16,6 @@ public interface GrupoService {
 
     void update(GrupoCommandModel model);
 
+    List<GrupoQueryModel> findByRbdAndGradoAndLetra(Integer rbd, Long grado, String letra);
+
 }

@@ -79,4 +79,17 @@ public class GrupoRepositoryImplTest {
         this.grupoRepository.update(new GrupoEntity(), 1L);
     }
 
+    @Test
+    public void shouldFindByRbdGradoAndLetra() {
+        when(mapper.findByRbdAndGradoAndLetra(anyInt(), anyLong(), anyString())).thenReturn(Collections.emptyList());
+        assertNotNull(this.grupoRepository.findByRbdAndGradoAndLetra(1, 1L, "A"));
+    }
+
+    @Test(expected = DatosGrupoMatriculaException.class)
+    public void shouldThrownExceptionWhenFindByRbdAndGradoAndLetra() {
+        when(mapper.findByRbdAndGradoAndLetra(anyInt(), anyLong(), anyString()))
+                .thenThrow(MyBatisSystemException.class);
+        this.grupoRepository.findByRbdAndGradoAndLetra(1, 1L, "A");
+    }
+
 }

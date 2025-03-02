@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -55,6 +56,16 @@ public class GrupoRepositoryImpl implements GrupoRepository {
         } catch (MyBatisSystemException e) {
             log.error(e.getMessage(), e);
             throw new DatosGrupoMatriculaException(String.format("Error al actualizar Grupo: %s", e.getMessage()), e);
+        }
+    }
+
+    @Override
+    public List<GrupoQueryModel> findByRbdAndGradoAndLetra(Integer rbd, Long grado, String letra) {
+        try {
+            return this.mapper.findByRbdAndGradoAndLetra(rbd, grado, letra);
+        } catch (MyBatisSystemException e) {
+            log.error(e.getMessage(), e);
+            throw new DatosGrupoMatriculaException(String.format("Error al obtener grupo: %s", e.getMessage()), e);
         }
     }
 }

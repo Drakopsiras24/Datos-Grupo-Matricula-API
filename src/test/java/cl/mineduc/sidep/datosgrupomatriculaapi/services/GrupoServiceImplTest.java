@@ -730,4 +730,36 @@ public class GrupoServiceImplTest {
         verify(plantaGrupoRepository).save(any());
     }
 
+    @Test
+    public void shouldFindGrupoByRbdAndGradoAndLetra() {
+
+        when(grupoRepository.findByRbdAndGradoAndLetra(anyInt(), anyLong(), anyString()))
+                .thenReturn(Collections.emptyList());
+        assertNotNull(this.grupoService.findByRbdAndGradoAndLetra(1, 1L, "A"));
+        verify(grupoRepository).findByRbdAndGradoAndLetra(anyInt(), anyLong(), anyString());
+
+    }
+
+    @Test
+    public void shouldSearchForAsistentes() {
+
+        GrupoQueryModel grupoQueryModel = new GrupoQueryModel();
+        grupoQueryModel.setId(1L);
+        grupoQueryModel.setRbd(1);
+        grupoQueryModel.setCupo(10);
+        grupoQueryModel.setLetra("A");
+        grupoQueryModel.setJornada("MANANA");
+        grupoQueryModel.setGrado("Cierto Grado");
+
+        when(grupoRepository.findByRbdAndGradoAndLetra(anyInt(), anyLong(), anyString()))
+                .thenReturn(Collections.singletonList(grupoQueryModel));
+        when(plantaGrupoRepository.findAsistentes(anyInt(), anyLong()))
+                .thenReturn(new ArrayList<>());
+
+        this.grupoService.findByRbdAndGradoAndLetra(1, 1L, "A");
+        verify(plantaGrupoRepository).findAsistentes(anyInt(), anyLong());
+
+    }
+
+
 }

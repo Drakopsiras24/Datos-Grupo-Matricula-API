@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -131,6 +132,15 @@ public class GrupoServiceImpl implements GrupoService {
 
         this.plantaGrupoRepository.save(plantaGrupo);
 
+    }
+
+    @Override
+    public List<GrupoQueryModel> findByRbdAndGradoAndLetra(Integer rbd, Long grado, String letra) {
+        List<GrupoQueryModel> grupos = this.grupoRepository.findByRbdAndGradoAndLetra(rbd, grado, letra);
+        for (GrupoQueryModel grupo : grupos) {
+            grupo.setAsistentes(this.plantaGrupoRepository.findAsistentes(rbd, grupo.getId()));
+        }
+        return grupos;
     }
 
     private Long findUnidadEducativaByRbd(Integer rbd) {
