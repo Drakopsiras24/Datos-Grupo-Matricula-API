@@ -3,13 +3,15 @@ package cl.mineduc.sidep.datosgrupomatriculaapi.services;
 import cl.mineduc.sidep.datosgrupomatriculaapi.entities.MatriculaEntity;
 import cl.mineduc.sidep.datosgrupomatriculaapi.exception.DatosGrupoMatriculaException;
 import cl.mineduc.sidep.datosgrupomatriculaapi.model.MatriculaCommandModel;
+import cl.mineduc.sidep.datosgrupomatriculaapi.model.MatriculaQueryModel;
 import cl.mineduc.sidep.datosgrupomatriculaapi.model.MatriculaUnidadEducativaQueryModel;
 import cl.mineduc.sidep.datosgrupomatriculaapi.repositories.GrupoRepository;
 import cl.mineduc.sidep.datosgrupomatriculaapi.repositories.MatriculaRepository;
 import cl.mineduc.sidep.datosgrupomatriculaapi.repositories.MatriculaUnidadEducativaRepository;
-import cl.mineduc.sidep.datosgrupomatriculaapi.repositories.ParvuloRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 
@@ -43,5 +45,10 @@ public class MatriculaGrupoServiceImpl implements MatriculaGrupoService {
         m.setFechaMatricula(model.getFechaMatricula().atStartOfDay());
 
         this.matriculaRepository.save(m);
+    }
+
+    @Override
+    public List<MatriculaQueryModel> findAll(Integer rbd, Integer rut) {
+        return this.matriculaRepository.findAll(rbd, rut);
     }
 }

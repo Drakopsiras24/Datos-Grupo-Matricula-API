@@ -3,6 +3,18 @@
 
 <mapper namespace="cl.mineduc.sidep.datosgrupomatriculaapi.mappers.MatriculaGrupoMapper">
 
+    <resultMap id="queryModel" type="cl.mineduc.sidep.datosgrupomatriculaapi.model.MatriculaQueryModel">
+        <id property="id" column="pk_matg_id_matricula_grupo" />
+        <result property="rbd" column="uned_rbd" />
+        <result property="run" column="pers_rut" />
+        <result property="dv" column="pers_dv" />
+        <result property="grado" column="nivel_grado_nombre" />
+        <result property="jornada" column="tijo_nombre" />
+        <result property="fechaMatricula" column="matg_fecha_matricula" />
+        <result property="fechaRetiro" column="matg_fecha_retiro" />
+        <result property="jornadaExtendida" column="matg_jornada_extendida" />
+    </resultMap>
+
     <insert id="save" parameterType="cl.mineduc.sidep.datosgrupomatriculaapi.entities.MatriculaEntity">
 
         INSERT INTO matricula_grupo (fk_matg_id_matricula_ue, fk_matg_id_grupo, matg_fecha_matricula,
@@ -12,4 +24,27 @@
                 #{fechaMatricula},
                 #{jornadaExtendida}, current_timestamp)
     </insert>
+    <select id="findAll" resultMap="queryModel">
+        select mg.pk_matg_id_matricula_grupo,
+               ue.uned_rbd,
+               p2.pers_rut,
+               p2.pers_dv,
+               ng.nivel_grado_nombre,
+               tj.tijo_nombre,
+               mg.matg_fecha_matricula,
+               mg.matg_fecha_retiro,
+               mg.matg_jornada_extendida
+        from matricula_grupo mg
+                 inner join matricula_unidad_educativa mue on mue.pk_mued_id_matricula_unidad_educativa = mg.fk_matg_id_matricula_ue
+                 inner join unidad_educativa ue on ue.pk_uned_id_unidad_educativa = mue.pk_mued_id_matricula_unidad_educativa
+                 inner join parvulo p on p.pk_parv_id_parvulo = mue.fk_mued_id_parvulo
+                 inner join persona p2 on p2.pk_pers_id_persona = p.fk_parv_id_persona
+                 inner join grupo g on g.pk_grup_id_grupo = mg.fk_matg_id_grupo
+                 inner join grado g2 on g2.pk_grad_id_grado = g.fk_grup_id_grado
+                 inner join nivel_grado ng on ng.pk_nivel_grado_id = g2.fk_grad_id_nivel_grado
+                 inner join jornada j on j.pk_jorn_id_jornada = g.fk_grup_id_jornada
+                 inner join tipo_jornada tj on tj.pk_tijo_id_tipo_jornada = j.fk_jorn_id_tipo_jornada
+        WHERE ue.uned_rbd = #{rbd}
+        AND p2.pers_rut = #{rut}
+    </select>
 </mapper>

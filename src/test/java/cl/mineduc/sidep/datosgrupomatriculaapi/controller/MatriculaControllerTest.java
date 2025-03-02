@@ -9,6 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Collections;
+
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -26,6 +28,13 @@ public class MatriculaControllerTest {
         doNothing().when(matriculaGrupoService).save(any(MatriculaCommandModel.class));
         this.matriculaController.save(new MatriculaCommandModel());
         verify(matriculaGrupoService, times(1)).save(any(MatriculaCommandModel.class));
+    }
+
+    @Test
+    public void shouldReturnMatriculas() {
+        when(matriculaGrupoService.findAll(anyInt(), anyInt()))
+                .thenReturn(Collections.emptyList());
+        assertNotNull(this.matriculaController.findAll(1, 1));
     }
 
 }

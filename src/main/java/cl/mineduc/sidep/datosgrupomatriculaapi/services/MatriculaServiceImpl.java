@@ -2,7 +2,6 @@ package cl.mineduc.sidep.datosgrupomatriculaapi.services;
 
 import cl.mineduc.sidep.datosgrupomatriculaapi.mappers.MatriculaMapper;
 import cl.mineduc.sidep.datosgrupomatriculaapi.model.Matricula;
-import cl.mineduc.sidep.datosgrupomatriculaapi.services.MatriculaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

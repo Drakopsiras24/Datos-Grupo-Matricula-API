@@ -4,7 +4,7 @@
 <mapper namespace="cl.mineduc.sidep.datosgrupomatriculaapi.mappers.ParvuloMapper">
 
     <select id="findByRut" resultType="java.lang.Long">
-        SELECT pe.pk_pers_id_persona
+        SELECT pa.pk_parv_id_parvulo
         FROM persona pe
         INNER JOIN parvulo pa ON pa.fk_parv_id_persona = pe.pk_pers_id_persona
         WHERE pe.pers_rut = #{rut}

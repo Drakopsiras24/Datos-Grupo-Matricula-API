@@ -1,15 +1,23 @@
 package cl.mineduc.sidep.datosgrupomatriculaapi.model;
 
-import cl.mineduc.sidep.datosgrupomatriculaapi.enums.TipoJornada;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
 public class MatriculaQueryModel {
 
+    @JsonIgnore
+    private Long id;
+    private Integer rbd;
+    private Integer run;
+    private String dv;
+    private String grado;
+    private String jornada;
+    private LocalDate fechaMatricula;
+    private LocalDate fechaRetiro;
+    private String jornadaExtendida;
 
 
 }

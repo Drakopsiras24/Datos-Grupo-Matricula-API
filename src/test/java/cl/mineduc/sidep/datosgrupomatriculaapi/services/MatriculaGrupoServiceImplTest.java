@@ -99,4 +99,11 @@ public class MatriculaGrupoServiceImplTest {
         verify(matriculaRepository, times(1)).save(any());
     }
 
+    @Test
+    public void shouldReturnMatriculas() {
+        when(matriculaRepository.findAll(anyInt(), anyInt()))
+                .thenReturn(Collections.emptyList());
+        assertNotNull(this.service.findAll(1, 1));
+    }
+
 }
