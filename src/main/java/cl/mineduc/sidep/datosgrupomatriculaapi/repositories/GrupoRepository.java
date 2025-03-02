@@ -13,4 +13,6 @@ public interface GrupoRepository {
 
     Long findIdGrupo(Long grado, Long jornada, Integer rbd, String letra);
 
+    void update(GrupoEntity entity, Long id);
+
 }

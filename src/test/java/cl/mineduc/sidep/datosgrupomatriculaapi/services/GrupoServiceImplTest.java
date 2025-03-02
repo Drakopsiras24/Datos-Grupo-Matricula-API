@@ -472,5 +472,262 @@ public class GrupoServiceImplTest {
 
     }
 
+    @Test
+    public void shouldFindGrupoWhenUpdateting() {
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        this.grupoService.update(model);
+        verify(grupoRepository).findIdGrupo(anyLong(), anyLong(), anyInt(), anyString());
+    }
+
+    @Test(expected = DatosGrupoMatriculaException.class)
+    public void shouldThrownExceptionWhenGrupoNotFoundOnUpdate() {
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(null);
+        this.grupoService.update(model);
+    }
+
+    @Test
+    public void shouldFindUnidadEducativaWhenUpdating() {
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(unidadEducativaRepository.findIdUnidadEducativaByRbd(anyInt()))
+                .thenReturn(1L);
+        this.grupoService.update(model);
+        verify(unidadEducativaRepository).findIdUnidadEducativaByRbd(anyInt());
+    }
+
+    @Test(expected = DatosGrupoMatriculaException.class)
+    public void shouldThrownExceptionWhenUnidadEducativaNotFoundOnUpdate() {
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(unidadEducativaRepository.findIdUnidadEducativaByRbd(anyInt()))
+                .thenReturn(null);
+        this.grupoService.update(model);
+    }
+
+    @Test
+    public void shouldFindJornadaWhenUpdating() {
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(unidadEducativaRepository.findIdUnidadEducativaByRbd(anyInt()))
+                .thenReturn(1L);
+        when(jornadaRepository.findByUnidadEducativaAndTipo(anyLong(), anyLong()))
+                .thenReturn(1L);
+        this.grupoService.update(model);
+        verify(jornadaRepository).findByUnidadEducativaAndTipo(anyLong(), anyLong());
+    }
+
+    @Test(expected = DatosGrupoMatriculaException.class)
+    public void shouldThrownExceptionWhenJornadaNotFoundOnUpdate() {
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(unidadEducativaRepository.findIdUnidadEducativaByRbd(anyInt()))
+                .thenReturn(1L);
+        when(jornadaRepository.findByUnidadEducativaAndTipo(anyLong(), anyLong()))
+                .thenReturn(null);
+        this.grupoService.update(model);
+    }
+
+    @Test
+    public void shouldFindGradoWhenUpdateing() {
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(unidadEducativaRepository.findIdUnidadEducativaByRbd(anyInt()))
+                .thenReturn(1L);
+        when(jornadaRepository.findByUnidadEducativaAndTipo(anyLong(), anyLong()))
+                .thenReturn(1L);
+        when(gradoRepository.findByTipoAndUnidadEducativa(anyLong(), anyLong()))
+                .thenReturn(1L);
+        this.grupoService.update(model);
+        verify(gradoRepository).findByTipoAndUnidadEducativa(anyLong(), anyLong());
+    }
+
+    @Test(expected = DatosGrupoMatriculaException.class)
+    public void shouldThrownExceptionWhenGradoNotFoundOnUpdate() {
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(unidadEducativaRepository.findIdUnidadEducativaByRbd(anyInt()))
+                .thenReturn(1L);
+        when(jornadaRepository.findByUnidadEducativaAndTipo(anyLong(), anyLong()))
+                .thenReturn(1L);
+        when(gradoRepository.findByTipoAndUnidadEducativa(anyLong(), anyLong()))
+                .thenReturn(null);
+        this.grupoService.update(model);
+    }
+
+    @Test
+    public void shouldFindPersonaWhenUpdateing() {
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(unidadEducativaRepository.findIdUnidadEducativaByRbd(anyInt()))
+                .thenReturn(1L);
+        when(jornadaRepository.findByUnidadEducativaAndTipo(anyLong(), anyLong()))
+                .thenReturn(1L);
+        when(gradoRepository.findByTipoAndUnidadEducativa(anyLong(), anyLong()))
+                .thenReturn(1L);
+        when(personaRepository.findByRut(anyInt()))
+                .thenReturn(1L);
+        this.grupoService.update(model);
+        verify(personaRepository).findByRut(anyInt());
+    }
+
+    @Test(expected = DatosGrupoMatriculaException.class)
+    public void shouldThrownExceptionWhenPersonaNotFoundOnUpdate() {
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(unidadEducativaRepository.findIdUnidadEducativaByRbd(anyInt()))
+                .thenReturn(1L);
+        when(jornadaRepository.findByUnidadEducativaAndTipo(anyLong(), anyLong()))
+                .thenReturn(1L);
+        when(gradoRepository.findByTipoAndUnidadEducativa(anyLong(), anyLong()))
+                .thenReturn(1L);
+        when(personaRepository.findByRut(anyInt()))
+                .thenReturn(null);
+        this.grupoService.update(model);
+    }
+
+    @Test
+    public void shouldFindFuncionarioOnUpdate() {
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(unidadEducativaRepository.findIdUnidadEducativaByRbd(anyInt()))
+                .thenReturn(1L);
+        when(jornadaRepository.findByUnidadEducativaAndTipo(anyLong(), anyLong()))
+                .thenReturn(1L);
+        when(gradoRepository.findByTipoAndUnidadEducativa(anyLong(), anyLong()))
+                .thenReturn(1L);
+        when(personaRepository.findByRut(anyInt()))
+                .thenReturn(1L);
+        when(funcionarioRepository.findByPersona(anyLong()))
+                .thenReturn(1L);
+        this.grupoService.update(model);
+        verify(funcionarioRepository).findByPersona(anyLong());
+    }
+
+    @Test(expected = DatosGrupoMatriculaException.class)
+    public void shouldThrownExceptionWhenFuncionarioNotFoundOnUpdate() {
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(unidadEducativaRepository.findIdUnidadEducativaByRbd(anyInt()))
+                .thenReturn(1L);
+        when(jornadaRepository.findByUnidadEducativaAndTipo(anyLong(), anyLong()))
+                .thenReturn(1L);
+        when(gradoRepository.findByTipoAndUnidadEducativa(anyLong(), anyLong()))
+                .thenReturn(1L);
+        when(personaRepository.findByRut(anyInt()))
+                .thenReturn(1L);
+        when(funcionarioRepository.findByPersona(anyLong()))
+                .thenReturn(null);
+        this.grupoService.update(model);
+    }
+
+    @Test
+    public void shouldFindPlantaOnUpdate() {
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(unidadEducativaRepository.findIdUnidadEducativaByRbd(anyInt()))
+                .thenReturn(1L);
+        when(jornadaRepository.findByUnidadEducativaAndTipo(anyLong(), anyLong()))
+                .thenReturn(1L);
+        when(gradoRepository.findByTipoAndUnidadEducativa(anyLong(), anyLong()))
+                .thenReturn(1L);
+        when(personaRepository.findByRut(anyInt()))
+                .thenReturn(1L);
+        when(funcionarioRepository.findByPersona(anyLong()))
+                .thenReturn(1L);
+        when(plantaRepository.findByFuncionario(anyLong(), anyLong()))
+                .thenReturn(1L);
+        this.grupoService.update(model);
+        verify(plantaRepository).findByFuncionario(anyLong(), anyLong());
+    }
+
+    @Test(expected = DatosGrupoMatriculaException.class)
+    public void shouldThrownExceptionWhenPlantaNotFoundOnUpdate() {
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(unidadEducativaRepository.findIdUnidadEducativaByRbd(anyInt()))
+                .thenReturn(1L);
+        when(jornadaRepository.findByUnidadEducativaAndTipo(anyLong(), anyLong()))
+                .thenReturn(1L);
+        when(gradoRepository.findByTipoAndUnidadEducativa(anyLong(), anyLong()))
+                .thenReturn(1L);
+        when(personaRepository.findByRut(anyInt()))
+                .thenReturn(1L);
+        when(funcionarioRepository.findByPersona(anyLong()))
+                .thenReturn(1L);
+        when(plantaRepository.findByFuncionario(anyLong(), anyLong()))
+                .thenReturn(null);
+        this.grupoService.update(model);
+    }
+
+    @Test
+    public void shouldUpdate() {
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(unidadEducativaRepository.findIdUnidadEducativaByRbd(anyInt()))
+                .thenReturn(1L);
+        when(jornadaRepository.findByUnidadEducativaAndTipo(anyLong(), anyLong()))
+                .thenReturn(1L);
+        when(gradoRepository.findByTipoAndUnidadEducativa(anyLong(), anyLong()))
+                .thenReturn(1L);
+        when(personaRepository.findByRut(anyInt()))
+                .thenReturn(1L);
+        when(funcionarioRepository.findByPersona(anyLong()))
+                .thenReturn(1L);
+        when(plantaRepository.findByFuncionario(anyLong(), anyLong()))
+                .thenReturn(1L);
+        doNothing().when(grupoRepository).update(any(), anyLong());
+
+        this.grupoService.update(model);
+
+        verify(grupoRepository).update(any(), anyLong());
+
+    }
+
+    @Test
+    public void shouldDeleteEducadorOnUpdate() {
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(unidadEducativaRepository.findIdUnidadEducativaByRbd(anyInt()))
+                .thenReturn(1L);
+        when(jornadaRepository.findByUnidadEducativaAndTipo(anyLong(), anyLong()))
+                .thenReturn(1L);
+        when(gradoRepository.findByTipoAndUnidadEducativa(anyLong(), anyLong()))
+                .thenReturn(1L);
+        when(personaRepository.findByRut(anyInt()))
+                .thenReturn(1L);
+        when(funcionarioRepository.findByPersona(anyLong()))
+                .thenReturn(1L);
+        when(plantaRepository.findByFuncionario(anyLong(), anyLong()))
+                .thenReturn(1L);
+        doNothing().when(grupoRepository).update(any(), anyLong());
+        doNothing().when(plantaGrupoRepository).deleteByGrupoAndPlanta(anyLong(), anyLong());
+
+        this.grupoService.update(model);
+        verify(plantaGrupoRepository).deleteByGrupoAndPlanta(anyLong(), anyLong());
+    }
+
+    @Test
+    public void shouldSaveNewEducadorWhenUpdating() {
+        when(grupoRepository.findIdGrupo(anyLong(), anyLong(), anyInt(), anyString()))
+                .thenReturn(1L);
+        when(unidadEducativaRepository.findIdUnidadEducativaByRbd(anyInt()))
+                .thenReturn(1L);
+        when(jornadaRepository.findByUnidadEducativaAndTipo(anyLong(), anyLong()))
+                .thenReturn(1L);
+        when(gradoRepository.findByTipoAndUnidadEducativa(anyLong(), anyLong()))
+                .thenReturn(1L);
+        when(personaRepository.findByRut(anyInt()))
+                .thenReturn(1L);
+        when(funcionarioRepository.findByPersona(anyLong())).thenReturn(1L);
+        when(plantaRepository.findByFuncionario(anyLong(), anyLong()))
+                .thenReturn(1L);
+        doNothing().when(grupoRepository).update(any(), anyLong());
+        doNothing().when(plantaGrupoRepository).deleteByGrupoAndPlanta(anyLong(), anyLong());
+        doNothing().when(plantaGrupoRepository).save(any());
+        this.grupoService.update(model);
+        verify(plantaGrupoRepository).save(any());
+    }
 
 }

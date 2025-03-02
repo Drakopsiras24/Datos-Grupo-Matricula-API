@@ -5,15 +5,15 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum RolPlanta {
+public enum RolGrupo {
 
     EDUCADOR(1L),
     ASISTENTE(2L);
 
     private final Long id;
 
-    public static RolPlanta valueOf(Long id) {
-        for (RolPlanta rolPlanta : RolPlanta.values()) {
+    public static RolGrupo valueOf(Long id) {
+        for (RolGrupo rolPlanta : RolGrupo.values()) {
             if (rolPlanta.getId().equals(id)) {
                 return rolPlanta;
             }

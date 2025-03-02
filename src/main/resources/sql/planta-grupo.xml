@@ -15,6 +15,11 @@
                 #{rol},
                 current_timestamp);
     </insert>
+    <delete id="deleteByGrupoAndPlanta">
+        DELETE FROM planta_grupo
+        WHERE planta_grupo.fk_plgr_planta_id = #{planta}
+        AND planta_grupo.fk_plgr_grupo_id = #{grupo}
+    </delete>
     <select id="findAsistentes" resultMap="asistenteModel">
         select p.pers_rut, p.pers_dv
         from persona p
@@ -26,5 +31,16 @@
         where ue.uned_rbd = #{rbd}
           and g.pk_grup_id_grupo = #{grupo}
         and pg.fk_plgr_rol_grupo_id = 2
+    </select>
+
+    <select id="findEducador" resultMap="asistenteModel">
+        SELECT p.pers_rut, p.pers_dv
+        FROM persona p
+        INNER JOIN funcionario f ON f.fk_fnci_id_persona = p.pk_pers_id_persona
+        INNER JOIN planta p2 ON p2.fk_plan_id_funcionario = f.pk_fnci_id_funcionario
+        INNER JOIN planta_grupo pg ON pg.fk_plgr_planta_id = p2.pk_plan_id_planta
+        INNER JOIN grupo g ON g.pk_grup_id_grupo = pg.fk_plgr_grupo_id
+        WHERE g.pk_grup_id_grupo = #{grupo}
+        AND p2.pk_plan_id_planta = #{planta}
     </select>
 </mapper>

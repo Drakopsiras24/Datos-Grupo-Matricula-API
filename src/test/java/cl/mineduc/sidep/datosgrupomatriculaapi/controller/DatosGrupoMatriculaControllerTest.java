@@ -29,9 +29,6 @@ public class DatosGrupoMatriculaControllerTest {
     private CursoService cursoService;
 
     @Mock
-    private AsistenteService asistenteService;
-
-    @Mock
     private MatriculaService matriculaService;
 
     @Mock
@@ -89,17 +86,9 @@ public class DatosGrupoMatriculaControllerTest {
 
     @Test
     public void actualizarCurso() {
-        GrupoModel curso = new GrupoModel();
-        curso.setRbd(1);
-
-        when(cursoService.obtenerIdPorRbd(anyInt())).thenReturn(1);
-        doNothing().when(cursoService).actualizarCurso(any(GrupoModel.class));
-
-        ResponseEntity<Void> response = datosGrupoMatriculaController.actualizarCurso(curso);
-
-        assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
-        verify(cursoService, times(1)).actualizarCurso(any(GrupoModel.class));
+        doNothing().when(grupoService).update(any());
+        this.datosGrupoMatriculaController.actualizarCurso(new  GrupoCommandModel());
+        verify(grupoService, times(1)).update(any());
     }
 
     @Test

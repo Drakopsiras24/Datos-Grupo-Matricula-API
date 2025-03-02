@@ -12,4 +12,8 @@ public interface PlantaGrupoMapper {
 
     List<Asistente> findAsistentes(@Param("rbd") Integer rbd, @Param("grupo") Long grupo);
 
+    Asistente findEducador(@Param("grupo") Long grupo, @Param("planta") Long planta);
+
+    void deleteByGrupoAndPlanta(@Param("grupo") Long grupo, @Param("planta") Long planta);
+
 }

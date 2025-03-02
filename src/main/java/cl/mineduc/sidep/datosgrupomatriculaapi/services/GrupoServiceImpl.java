@@ -1,9 +1,8 @@
 package cl.mineduc.sidep.datosgrupomatriculaapi.services;
 
-import cl.mineduc.sidep.datosgrupomatriculaapi.entities.GradoEntity;
 import cl.mineduc.sidep.datosgrupomatriculaapi.entities.GrupoEntity;
 import cl.mineduc.sidep.datosgrupomatriculaapi.entities.PlantaGrupoEntity;
-import cl.mineduc.sidep.datosgrupomatriculaapi.enums.RolPlanta;
+import cl.mineduc.sidep.datosgrupomatriculaapi.enums.RolGrupo;
 import cl.mineduc.sidep.datosgrupomatriculaapi.enums.TipoJornada;
 import cl.mineduc.sidep.datosgrupomatriculaapi.exception.DatosGrupoMatriculaException;
 import cl.mineduc.sidep.datosgrupomatriculaapi.model.Asistente;
@@ -16,8 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -57,7 +54,7 @@ public class GrupoServiceImpl implements GrupoService {
         PlantaGrupoEntity entity = new PlantaGrupoEntity();
         entity.setGrupo(g.getId());
         entity.setPlanta(planta);
-        entity.setRol(RolPlanta.EDUCADOR.getId());
+        entity.setRol(RolGrupo.EDUCADOR.getId());
 
         this.plantaGrupoRepository.save(entity);
 
@@ -93,11 +90,46 @@ public class GrupoServiceImpl implements GrupoService {
             PlantaGrupoEntity entity = new PlantaGrupoEntity();
             entity.setGrupo(grupo);
             entity.setPlanta(planta);
-            entity.setRol(RolPlanta.ASISTENTE.getId());
+            entity.setRol(RolGrupo.ASISTENTE.getId());
 
             this.plantaGrupoRepository.save(entity);
 
         }
+
+    }
+
+    @Transactional
+    @Override
+    public void update(GrupoCommandModel model) {
+        Long grupo = this.grupoRepository.findIdGrupo(model.getGrado(), model.getJornada().getId(), model.getRbd(), model.getLetra());
+        if (grupo == null) {
+            throw new DatosGrupoMatriculaException("Grupo no encontrado");
+        }
+
+        Long unidadEducativa = this.findUnidadEducativaByRbd(model.getRbd());
+        Long jornada = this.findJornada(unidadEducativa, model.getJornada());
+        Long grado = this.findGrado(unidadEducativa, model.getGrado());
+        Long persona = this.findPersona(model.getEducador().getRut());
+        Long funcionario = this.findFuncionario(persona);
+        Long planta = this.findPlanta(funcionario, unidadEducativa);
+
+        GrupoEntity g = new  GrupoEntity();
+        g.setId(grupo);
+        g.setJornada(jornada);
+        g.setGrado(grado);
+        g.setLetra(model.getLetra());
+        g.setCupo(model.getCupo());
+
+        this.grupoRepository.update(g, grupo);
+
+        this.plantaGrupoRepository.deleteByGrupoAndPlanta(grupo, planta);
+
+        PlantaGrupoEntity plantaGrupo = new PlantaGrupoEntity();
+        plantaGrupo.setRol(RolGrupo.EDUCADOR.getId());
+        plantaGrupo.setPlanta(planta);
+        plantaGrupo.setGrupo(grupo);
+
+        this.plantaGrupoRepository.save(plantaGrupo);
 
     }
 

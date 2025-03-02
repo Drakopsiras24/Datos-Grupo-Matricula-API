@@ -38,4 +38,24 @@ public class PlantaGrupoRepositoryImpl implements PlantaGrupoRepository {
         }
     }
 
+    @Override
+    public Asistente findEducador(Long grupo, Long planta) {
+        try {
+            return this.mapper.findEducador(grupo, planta);
+        } catch (MyBatisSystemException e) {
+            log.error(e.getMessage(), e);
+            throw new DatosGrupoMatriculaException(String.format("Error al consultar en Planta Grupo: %s", e.getMessage()), e);
+        }
+    }
+
+    @Override
+    public void deleteByGrupoAndPlanta(Long grupo, Long planta) {
+        try {
+            this.mapper.deleteByGrupoAndPlanta(grupo, planta);
+        } catch (MyBatisSystemException e) {
+            log.error(e.getMessage(), e);
+            throw new DatosGrupoMatriculaException(String.format("Error al eliminar en Planta Grupo: %s", e.getMessage()), e);
+        }
+    }
+
 }

@@ -66,4 +66,17 @@ public class GrupoRepositoryImplTest {
         this.grupoRepository.findIdGrupo(1L, 1L, 1, "A");
     }
 
+    @Test
+    public void shouldUpdate() {
+        doNothing().when(mapper).update(any(), anyLong());
+        this.grupoRepository.update(new GrupoEntity(), 1L);
+        verify(this.mapper).update(any(), anyLong());
+    }
+
+    @Test(expected = DatosGrupoMatriculaException.class)
+    public void shouldThrownExceptionWhenErrorOnUpodate() {
+        doThrow(MyBatisSystemException.class).when(mapper).update(any(), anyLong());
+        this.grupoRepository.update(new GrupoEntity(), 1L);
+    }
+
 }

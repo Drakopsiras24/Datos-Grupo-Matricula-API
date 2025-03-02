@@ -47,4 +47,14 @@ public class GrupoRepositoryImpl implements GrupoRepository {
             throw new DatosGrupoMatriculaException(String.format("Error al buscar Grupo en Base de Datos: %s", e.getMessage()), e);
         }
     }
+
+    @Override
+    public void update(GrupoEntity entity, Long id) {
+        try {
+            this.mapper.update(entity, id);
+        } catch (MyBatisSystemException e) {
+            log.error(e.getMessage(), e);
+            throw new DatosGrupoMatriculaException(String.format("Error al actualizar Grupo: %s", e.getMessage()), e);
+        }
+    }
 }

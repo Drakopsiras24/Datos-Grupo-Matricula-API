@@ -14,6 +14,11 @@
             <result property="dv" column="pers_dv" />
         </association>
     </resultMap>
+    <update id="update">
+        UPDATE grupo
+        SET grup_cupo = #{g.cupo}
+        WHERE pk_grup_id_grupo = #{id}
+    </update>
 
     <select id="findModelByRbd" resultMap="queryModel" parameterType="java.lang.Integer">
         select g.pk_grup_id_grupo,

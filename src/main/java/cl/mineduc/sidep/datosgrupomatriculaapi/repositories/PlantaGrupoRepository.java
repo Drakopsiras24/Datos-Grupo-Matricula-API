@@ -11,4 +11,8 @@ public interface PlantaGrupoRepository {
 
     List<Asistente> findAsistentes(Integer rbd, Long grupo);
 
+    Asistente findEducador(Long grupo, Long planta);
+
+    void deleteByGrupoAndPlanta(Long grupo, Long planta);
+
 }

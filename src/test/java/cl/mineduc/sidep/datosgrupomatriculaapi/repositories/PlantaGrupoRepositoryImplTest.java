@@ -3,6 +3,7 @@ package cl.mineduc.sidep.datosgrupomatriculaapi.repositories;
 import cl.mineduc.sidep.datosgrupomatriculaapi.entities.PlantaGrupoEntity;
 import cl.mineduc.sidep.datosgrupomatriculaapi.exception.DatosGrupoMatriculaException;
 import cl.mineduc.sidep.datosgrupomatriculaapi.mappers.PlantaGrupoMapper;
+import cl.mineduc.sidep.datosgrupomatriculaapi.model.Asistente;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -50,6 +51,33 @@ public class PlantaGrupoRepositoryImplTest {
         when(mapper.findAsistentes(anyInt(), anyLong()))
                 .thenThrow(MyBatisSystemException.class);
         this.repository.findAsistentes(1, 1L);
+    }
+
+    @Test
+    public void shouldReturnEducador() {
+        when(mapper.findEducador(anyLong(), anyLong()))
+                .thenReturn(new Asistente());
+        assertNotNull(this.repository.findEducador(1L, 1L));
+    }
+
+    @Test(expected = DatosGrupoMatriculaException.class)
+    public void shouldThrownExceptionWhenErrorSearchingEducador() {
+        when(mapper.findEducador(anyLong(), anyLong()))
+                .thenThrow(MyBatisSystemException.class);
+        this.repository.findEducador(1L, 1L);
+    }
+
+    @Test
+    public void shouldDeleteByPlantaAndGrupo() {
+        doNothing().when(mapper).deleteByGrupoAndPlanta(anyLong(), anyLong());
+        this.repository.deleteByGrupoAndPlanta(1L, 1L);
+        verify(this.mapper).deleteByGrupoAndPlanta(1L, 1L);
+    }
+
+    @Test(expected = DatosGrupoMatriculaException.class)
+    public void shouldThrownExceptionWhenDeletingByPlantaAndGrupo() {
+        doThrow(MyBatisSystemException.class).when(mapper).deleteByGrupoAndPlanta(anyLong(), anyLong());
+        this.repository.deleteByGrupoAndPlanta(1L, 1L);
     }
 
 }
