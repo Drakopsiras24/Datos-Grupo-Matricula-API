@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cl.mineduc.sidep.datosgrupomatriculaapi.mappers.ParvuloMapper">
+
+    <select id="findByRut" resultType="java.lang.Long">
+        SELECT pe.pk_pers_id_persona
+        FROM persona pe
+        INNER JOIN parvulo pa ON pa.fk_parv_id_persona = pe.pk_pers_id_persona
+        WHERE pe.pers_rut = #{rut}
+    </select>
+</mapper>

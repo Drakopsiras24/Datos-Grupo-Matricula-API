@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cl.mineduc.sidep.datosgrupomatriculaapi.mappers.MatriculaUnidadEducativaMapper">
+
+    <resultMap id="matriculaUnidadEducativaQuery" type="cl.mineduc.sidep.datosgrupomatriculaapi.model.MatriculaUnidadEducativaQueryModel">
+        <id property="id" column="pk_mued_id_matricula_unidad_educativa" />
+        <result property="run" column="pers_rut" />
+        <result property="dv" column="pers_dv" />
+        <result property="rbd" column="uned_rbd" />
+        <result property="fechaMatricula" column="mued_fecha_matricula" />
+        <result property="fechaRetiro" column="mued_fecha_retiro" />
+    </resultMap>
+
+    <insert id="save"
+            useGeneratedKeys="true"
+            keyProperty="id"
+            keyColumn="pk_mued_id_matricula_unidad_educativa"
+            parameterType="cl.mineduc.sidep.datosgrupomatriculaapi.entities.MatriculaUnidadEducativaEntity">
+        INSERT INTO matricula_unidad_educativa (fk_mued_id_unidad_educativa, fk_mued_id_parvulo, mued_fecha_matricula, mued_fecha_creacion)
+        VALUES (
+                #{unidadEducativa},
+                #{parvulo},
+                #{fechaMatricula},
+                current_timestamp)
+    </insert>
+    <select id="findAll" resultMap="matriculaUnidadEducativaQuery">
+        select mue.pk_mued_id_matricula_unidad_educativa,
+               p2.pers_rut,
+               p2.pers_dv,
+               ue.uned_rbd,
+               mue.mued_fecha_matricula,
+               mue.mued_fecha_retiro
+        from matricula_unidad_educativa mue
+                 inner join unidad_educativa ue
+                            on ue.pk_uned_id_unidad_educativa = mue.pk_mued_id_matricula_unidad_educativa
+                 inner join parvulo p on p.pk_parv_id_parvulo = mue.fk_mued_id_parvulo
+                 inner join persona p2 on p2.pk_pers_id_persona = p.fk_parv_id_persona
+        where TRUE
+        AND ue.uned_rbd = #{rbd}
+        <if test="rut != null">
+            AND p2.pers_rut = #{rut}
+        </if>
+    </select>
+</mapper>

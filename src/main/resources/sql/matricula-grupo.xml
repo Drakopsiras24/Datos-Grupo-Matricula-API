@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cl.mineduc.sidep.datosgrupomatriculaapi.mappers.MatriculaGrupoMapper">
+
+    <insert id="save" parameterType="cl.mineduc.sidep.datosgrupomatriculaapi.entities.MatriculaEntity">
+
+        INSERT INTO matricula_grupo (fk_matg_id_matricula_ue, fk_matg_id_grupo, matg_fecha_matricula,
+                                     matg_jornada_extendida, matg_fecha_creacion)
+        VALUES (#{matriculaUnidadEducativa},
+                #{grupo},
+                #{fechaMatricula},
+                #{jornadaExtendida}, current_timestamp)
+    </insert>
+</mapper>
