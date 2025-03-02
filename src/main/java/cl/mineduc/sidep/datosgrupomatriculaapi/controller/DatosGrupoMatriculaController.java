@@ -48,20 +48,12 @@ public class DatosGrupoMatriculaController {
         return ResponseEntity.ok(this.grupoService.findByRbd(rbd));
     }
 
-    // Obtener los datos de un curso usando múltiples parámetros
     @GetMapping("/{rbd}/grado/{grado}/letra/{letra}")
-    public ResponseEntity<GrupoModel> obtenerCursoConParametros(
+    public ResponseEntity<List<GrupoQueryModel>> obtenerCursoConParametros(
             @PathVariable Integer rbd,
-            @PathVariable Integer grado,
+            @PathVariable Long grado,
             @PathVariable String letra) {
-
-        // Llama al servicio que gestiona la lógica de negocio para obtener los datos del curso
-        GrupoModel curso = cursoService.obtenerCursoConParametros(rbd, grado, letra);
-
-        if (curso == null) {
-            return ResponseEntity.status(404).build(); // Devuelve 404 si no se encuentra el curso
-        }
-        return ResponseEntity.ok(curso); // Devuelve los datos del curso si se encuentra
+        return ResponseEntity.ok(this.grupoService.findByRbdAndGradoAndLetra(rbd, grado, letra));
     }
 
     // Eliminar un curso
